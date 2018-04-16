@@ -92,7 +92,7 @@ export class SearchService {
 
   private async connect() {
     this.client = new Client({
-      host: 'https://mobile.foxtrot.com.ua:9201' //await this.repo.getAppParam('ELASTIC_ENDPOINT')
+      host: await this.repo.getAppParam('ELASTIC_ENDPOINT')
     });
   }
 

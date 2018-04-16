@@ -1,8 +1,8 @@
 export class AppConstants {
 
   /* TODO перенести/реализовать все подобные сервисы в бекенде api/svc/....*/
-  public static readonly BASE_URL = 'https://mobile.foxtrot.com.ua';
-  //public static readonly BASE_URL = 'http://localhost:44374';
+  //public static readonly BASE_URL = 'https://mobile.foxtrot.com.ua';
+  public static readonly BASE_URL = 'http://localhost:44374';
   public static readonly BASE_PAYMENT_URL = 'https://mobile.foxtrot.com.ua/paymaster/payment';
   public static readonly USE_PRODUCTION = true;
   public static readonly EMAIL_SUBSCRIPTION_ENDPOINT = 'http://www.foxtrot.com.ua/Subscription/Subscription/';
