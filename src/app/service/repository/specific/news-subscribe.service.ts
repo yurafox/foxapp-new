@@ -14,7 +14,7 @@ export class NewsSubscribeService extends AbstractNewsSubscribeService {
   subscribeToNews(email: string): Observable<Response> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.post(AppConstants.EMAIL_SUBSCRIPTION_ENDPOINT, email, headers);
+    return this.http.post(AppConstants.EMAIL_SUBSCRIPTION_ENDPOINT, email, {headers:headers});
   }
 
 }

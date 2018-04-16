@@ -20,7 +20,13 @@ export class ActionsPage extends ComponentBase {
 
   async ngOnInit() {
     super.ngOnInit();
-    this.actions = await this._repo.getActions();
+    this.actions = [];
+    let actions = await this._repo.getActions();
+    for (let i = 0; i < actions.length; i++) {
+      if (actions[i].sketch_content && actions[i].sketch_content !== '') {
+        this.actions.push(actions[i]);
+      }
+    }
   }
 
 }

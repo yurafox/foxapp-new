@@ -97,7 +97,6 @@ import {
 import {NgxQRCodeModule} from 'ngx-qrcode2';
 import {AppAvailability} from '@ionic-native/app-availability';
 import {Device} from "@ionic-native/device";
-import {LocalNotifications} from '@ionic-native/local-notifications';
 import {Network} from "@ionic-native/network";
 import {Keyboard} from "@ionic-native/keyboard";
 
@@ -184,7 +183,6 @@ import {Keyboard} from "@ionic-native/keyboard";
     AppAvailability,
     Ionic2Rating,
     Device,
-    LocalNotifications,
     Network,
     Keyboard,
     {provide: ErrorHandler, useClass: IonicErrorHandler},

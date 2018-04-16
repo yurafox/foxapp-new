@@ -1,4 +1,3 @@
-import { HomePage } from './../../pages/home/home';
 import { ComponentsModule } from './../components.module';
 import {PipesModule} from '../../app/pipe/pipes.module';
 //import { AppModule } from './../../app/app.module';
@@ -21,7 +20,7 @@ export function createComponentFactory(
   compiler: Compiler,
   metadata: Component,
   context:any
-): Promise<ComponentFactory<any>> {
+): Promise<any | ComponentFactory<any>> {
   const cmpClass = class DynamicComponent {};
   cmpClass.prototype = context;
   const decoratedCmp = Component(metadata)(cmpClass);
@@ -44,7 +43,7 @@ export function createComponentFactory(
 @Directive({selector:"html-outlet"})
 export class HtmlOutlet {
   @Input() html: string;
-  @Input() context:any
+  @Input() context:any;
   cmpRef: ComponentRef<any>;
 
   constructor(private vcRef: ViewContainerRef, private compiler: Compiler) {}
