@@ -43,7 +43,8 @@ import {
   Region,
   BannerSlide,
   ClientMessage,
-  CurrencyRate
+  CurrencyRate,
+  ActionByProduct
 } from '../../../model/index';
 
 import { AbstractDataRepository } from '../../index';
@@ -96,9 +97,8 @@ const clientPollAnswersUrl = `${AppConstants.BASE_URL}/api/poll/ClientPollAnswer
 const pollQuestionUrl=`${AppConstants.BASE_URL}/api/poll/pollQuestions`;
 const pollQuestionAnswerUrl = `${AppConstants.BASE_URL}/api/poll/pollAnswers`;
 const pagesDynamicUrl = `${AppConstants.BASE_URL}/api/page`;
-const actionDynamicUrl = `${AppConstants.BASE_URL}/api/stock`;
+const actionDynamicUrl = `${AppConstants.BASE_URL}/api/action`;
 const storesUrl = `${AppConstants.BASE_URL}/api/storeplace/stores`;
-const storeUrl = `${AppConstants.BASE_URL}/api/storeplace/store`;
 const productReviewsUrl = `${AppConstants.BASE_URL}/api/reviews/GetProductReviews`;
 const storeReviewsUrl = `${AppConstants.BASE_URL}/api/reviews/GetStoreReviews`;
 const storeReviewsByStoreIdUrl = `${AppConstants.BASE_URL}/api/reviews/GetStoreReviewsByStoreId`;
@@ -117,6 +117,7 @@ const appParamsUrl = `${AppConstants.BASE_URL}/api/appparams`;
 const clientOrderDatesRangeUrl = `${AppConstants.BASE_URL}/api/client/OrderDatesRanges`;
 const clientOrderProductsByDateUrl = `${AppConstants.BASE_URL}/api/cart/ClientOrderProductsByDate`;
 const getCurrencyRate = `${AppConstants.BASE_URL}/api/currency/rate`;
+const getActionsByProductUrl = `${AppConstants.BASE_URL}/api/action/GetProductActions`;
 //DEV URLS
 // const productDescriptionsUrl = 'api/mproductDescriptions';
 // const currenciesUrl = "/api/mcurrencies";
@@ -274,6 +275,10 @@ export class AppDataRepository extends AbstractDataRepository {
       if (response.status !== 200) {
         throw new Error("server side status error");
       }
+
+      const minLoanAmt = parseInt(await this.getAppParam('MIN_LOAN_AMT'));
+      const maxLoanAmt = parseInt(await this.getAppParam('MAX_LOAN_AMT'));
+
       const cItems = new Array<CreditProduct>();
       if (data != null) {
         data.forEach(val => {
@@ -286,6 +291,8 @@ export class AppDataRepository extends AbstractDataRepository {
           cp.maxTerm = val.maxTerm;
           cp.firstPay = val.firstPay;
           cp.monthCommissionPct = val.monthCommissionPct;
+          cp.minAmt = minLoanAmt;
+          cp.maxAmt = maxLoanAmt;
           cp.yearPct = val.yearPct;
           cp.kpcPct = val.kpcPct;
           cp.minTerm = val.minTerm;
@@ -668,7 +675,7 @@ export class AppDataRepository extends AbstractDataRepository {
     try {
 
       const response = await this.http
-        .get(clientOrdersUrl + `/${orderId}`)
+        .get(clientOrdersUrl + `/${orderId}`, RequestFactory.makeAuthHeader())
         .toPromise();
 
       const data = response.json();
@@ -2411,7 +2418,7 @@ export class AppDataRepository extends AbstractDataRepository {
 
   public async getStoreById(id: number): Promise<Store> {
     try {
-      const response = await this.http.get(`${storeUrl}/${id}`,RequestFactory.makeAuthHeader()).toPromise();
+      const response = await this.http.get(`${storesUrl}/${id}`,RequestFactory.makeAuthHeader()).toPromise();
 
       const data = response.json();
       if (response.status !== 200) {
@@ -3253,7 +3260,7 @@ export class AppDataRepository extends AbstractDataRepository {
   public async getClientOrderDatesRanges(): Promise<OrdersFilter[]> {
     try {
       const response = await this.http
-        .get(clientOrderDatesRangeUrl).toPromise();
+        .get(clientOrderDatesRangeUrl,RequestFactory.makeAuthHeader()).toPromise();
 
       const data: any = response.json();
       if (response.status !== 200) {
@@ -3278,11 +3285,9 @@ export class AppDataRepository extends AbstractDataRepository {
   public async getDefaultClientOrderDatesRanges(isDefault: boolean): Promise<OrdersFilter> {
     try {
       const response = await this.http
-        .get(clientOrderDatesRangeUrl, {
-          search: this.createSearchParams([
-            {key: "isDefault", value: String(isDefault)}
-          ])
-        }).toPromise();
+        .get(clientOrderDatesRangeUrl,RequestFactory.makeSearch([
+          {key: "isDefault", value: String(isDefault)}
+        ])).toPromise();
 
       const data: any = response.json();
       if (response.status !== 200) {
@@ -3303,11 +3308,9 @@ export class AppDataRepository extends AbstractDataRepository {
               Promise<{orderId: string, orderDate: Date, orderSpecId: number, idProduct: number,
                        productName: string, productImageUrl: string, loTrackTicket: string, idQuotation: number}[]> {
     try {
-      const response = await this.http.get(clientOrderProductsByDateUrl, {
-          search: this.createSearchParams([
-            {key: "datesRange", value: datesRange}
-          ])
-        }).toPromise();
+      const response = await this.http.get(clientOrderProductsByDateUrl,RequestFactory.makeSearch([
+        {key: "datesRange", value: datesRange}
+      ])).toPromise();
 
       const data: any = response.json();
       if (response.status !== 200) {
@@ -3352,4 +3355,30 @@ export class AppDataRepository extends AbstractDataRepository {
       return await this.handleError(err);
     }
   }
+
+  public async getActionsByProduct(idProduct: number): Promise<ActionByProduct[]> {
+    try {
+      const _id = idProduct.toString();
+      const response = await this.http
+        .get(getActionsByProductUrl + `/${_id}` ).toPromise();
+      const data = response.json();
+      if (response.status !== 200) {
+        throw new Error("server side status error");
+      }
+      const arr: ActionByProduct[] = new Array<ActionByProduct>();
+      if (data !== null) {
+        data.forEach(val =>
+          arr.push(
+            new ActionByProduct(val.actionId,val.actionType,val.idQuotationProduct,val.idProduct,val.idCur,val.actionPrice,
+                                val.regularPrice,val.bonusQty,val.productName,val.complect,val.isMain,val.idGroup,
+                                val.imgUrl,val.title)
+          )
+        );
+      }
+      return arr;
+    } catch (err) {
+      return await this.handleError(err);
+    }
+  }
+
 }

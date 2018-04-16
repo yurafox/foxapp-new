@@ -1,5 +1,3 @@
-import {AppConstants} from '../app-constants';
-
 export class CreditProduct {
   sId?: number;
   sName?: string;
@@ -11,8 +9,8 @@ export class CreditProduct {
   monthCommissionPct?: number;
   yearPct?: number;
   kpcPct?: number;
-  minAmt?: number = AppConstants.MIN_LOAN_AMT;
-  maxAmt?: number = AppConstants.MAX_LOAN_AMT;
+  minAmt?: number;
+  maxAmt?: number;
   minTerm?: number;
 
   constructor(){};

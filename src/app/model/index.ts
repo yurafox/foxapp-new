@@ -61,3 +61,4 @@ export * from './banner-slide';
 export * from './client-message';
 export * from './app-param';
 export * from './currency-rate';
+export * from './action-by-product';

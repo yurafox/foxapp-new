@@ -7,6 +7,7 @@ import {CreditProduct} from '../../app/model/credit-product';
 import {CreditCalc} from '../../app/model/credit-calc';
 import {EnumPaymentMethod} from '../../app/model/enum-payment-method';
 import {ComponentBase} from "../../components/component-extension/component-base";
+import {AbstractDataRepository} from '../../app/service/repository/abstract/abstract-data-repository';
 
 @IonicPage()
 @Component({
@@ -25,7 +26,8 @@ export class CreditCalcPage extends ComponentBase {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public viewCtrl: ViewController, public cart: CartService,
-              public userService: UserService, public loadingCtrl: LoadingController) {
+              public userService: UserService, public loadingCtrl: LoadingController,
+              private repo: AbstractDataRepository) {
     super();
     this.initLocalization();
     this.quotProduct = this.navParams.data.quotProduct;
@@ -66,6 +68,7 @@ export class CreditCalcPage extends ComponentBase {
       _cpOplataChastyami.maxTerm = pInfo.partsPmtCnt;
       _cpOplataChastyami.monthCommissionPct = 0;
       _cpOplataChastyami.maxAmt = null;
+      _cpOplataChastyami.minAmt = parseInt(await this.repo.getAppParam('MIN_LOAN_AMT'));
       _cpOplataChastyami.minTerm = 2;
       this.credits.push(new CreditCalc(false, _cpOplataChastyami));
 
@@ -74,8 +77,9 @@ export class CreditCalcPage extends ComponentBase {
       _cpMgnovCredit.sName = await this.locale['PrivatInstant'];
       _cpMgnovCredit.firstPay = 0;
       _cpMgnovCredit.maxTerm = pInfo.creditSize;
-      _cpMgnovCredit.monthCommissionPct = 2.9;
+      _cpMgnovCredit.monthCommissionPct = parseInt(await this.repo.getAppParam('PRIVAT_MGNOV_CREDIT_PCT*10'))/10;
       _cpMgnovCredit.maxAmt = null;
+      _cpOplataChastyami.minAmt = parseInt(await this.repo.getAppParam('MIN_LOAN_AMT'));
       _cpMgnovCredit.minTerm = 2;
       this.credits.push(new CreditCalc(false, _cpMgnovCredit));
 

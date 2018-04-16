@@ -32,6 +32,7 @@ import { GridHrComponent } from './grid-hr/grid-hr';
 import { ProgressBarComponent } from './progress-bar/progress-bar';
 import { ItemSimpleComponent } from './item-simple/item-simple';
 import { SlidingBannerComponent } from './sliding-banner/sliding-banner';
+import { ComplectComponent } from './complect/complect';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { SlidingBannerComponent } from './sliding-banner/sliding-banner';
     GridHrComponent,
     ProgressBarComponent,
     ItemSimpleComponent,
-    SlidingBannerComponent
+    SlidingBannerComponent,
+    ComplectComponent
   ],
   entryComponents: [
     CustomPopupComponent,
@@ -105,7 +107,8 @@ import { SlidingBannerComponent } from './sliding-banner/sliding-banner';
     GridHrComponent,
     ProgressBarComponent,
     ItemSimpleComponent,
-    SlidingBannerComponent
+    SlidingBannerComponent,
+    ComplectComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

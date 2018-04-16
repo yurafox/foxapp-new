@@ -32,7 +32,8 @@ import { QuotationProduct,
           Region,
           BannerSlide,
           ClientMessage,
-          CurrencyRate
+          CurrencyRate,
+          ActionByProduct
        } from '../../../model/index';
 import {IDictionary, Providers} from "../../../core/app-core";
 import {AppParam} from '../../../model/app-param';
@@ -172,4 +173,5 @@ export abstract class AbstractDataRepository {
                           idQuotation: number}[]>;
 
   public async abstract getCurrencyRate():Promise<CurrencyRate[]>;
+  public async abstract getActionsByProduct(idProduct: number): Promise<ActionByProduct[]>;
 }

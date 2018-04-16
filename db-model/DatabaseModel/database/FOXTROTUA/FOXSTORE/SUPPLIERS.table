@@ -33,12 +33,16 @@
       <notNull>true</notNull>
     </column>
     <column>
-      <name>PAYMENT_METHOD</name>
+      <name>PAYMENT_METHOD_ID</name>
       <dataTypeUsage>
         <attributeValues>
           <entry>
             <key>precision</key>
             <value class="java.lang.String">18</value>
+          </entry>
+          <entry>
+            <key>scale</key>
+            <value class="java.lang.Long">0</value>
           </entry>
         </attributeValues>
         <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
@@ -46,6 +50,21 @@
         </dataTypeID>
       </dataTypeUsage>
       <notNull>true</notNull>
+      <properties>
+        <entry>
+          <key>OfflineDBConstants.IMPORT_SOURCE_ID</key>
+          <value class="oracle.javatools.db.ReferenceID">
+            <name>PAYMENT_METHOD_ID</name>
+            <parent class="oracle.javatools.db.ReferenceID">
+              <name>SUPPLIERS</name>
+              <identifier class="java.math.BigDecimal">76806</identifier>
+              <schemaName>FOXSTORE</schemaName>
+              <type>TABLE</type>
+            </parent>
+            <type>COLUMN</type>
+          </value>
+        </entry>
+      </properties>
     </column>
     <column>
       <name>RATING</name>
@@ -62,8 +81,102 @@
       </dataTypeUsage>
       <notNull>false</notNull>
     </column>
+    <column>
+      <name>POSITIVE_FEEDBACK_PCT</name>
+      <dataTypeUsage>
+        <attributeValues>
+          <entry>
+            <key>precision</key>
+            <value class="java.lang.String">8</value>
+          </entry>
+          <entry>
+            <key>scale</key>
+            <value class="java.lang.Long">2</value>
+          </entry>
+        </attributeValues>
+        <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+          <typeName>NUMBER</typeName>
+        </dataTypeID>
+      </dataTypeUsage>
+      <notNull>false</notNull>
+      <properties>
+        <entry>
+          <key>OfflineDBConstants.IMPORT_SOURCE_ID</key>
+          <value class="oracle.javatools.db.ReferenceID">
+            <name>POSITIVE_FEEDBACK_PCT</name>
+            <parent class="oracle.javatools.db.ReferenceID">
+              <name>SUPPLIERS</name>
+              <identifier class="java.math.BigDecimal">76806</identifier>
+              <schemaName>FOXSTORE</schemaName>
+              <type>TABLE</type>
+            </parent>
+            <type>COLUMN</type>
+          </value>
+        </entry>
+      </properties>
+    </column>
+    <column>
+      <name>REFS_COUNT</name>
+      <dataTypeUsage>
+        <attributeValues>
+          <entry>
+            <key>precision</key>
+            <value class="java.lang.String">8</value>
+          </entry>
+          <entry>
+            <key>scale</key>
+            <value class="java.lang.Long">0</value>
+          </entry>
+        </attributeValues>
+        <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+          <typeName>NUMBER</typeName>
+        </dataTypeID>
+      </dataTypeUsage>
+      <notNull>false</notNull>
+      <properties>
+        <entry>
+          <key>OfflineDBConstants.IMPORT_SOURCE_ID</key>
+          <value class="oracle.javatools.db.ReferenceID">
+            <name>REFS_COUNT</name>
+            <parent class="oracle.javatools.db.ReferenceID">
+              <name>SUPPLIERS</name>
+              <identifier class="java.math.BigDecimal">76806</identifier>
+              <schemaName>FOXSTORE</schemaName>
+              <type>TABLE</type>
+            </parent>
+            <type>COLUMN</type>
+          </value>
+        </entry>
+      </properties>
+    </column>
   </columns>
   <constraints>
+    <constraint class="oracle.javatools.db.FKConstraint">
+      <name>SUPPLIER_FK1</name>
+      <columnIDs>
+        <columnID class="oracle.javatools.db.NameBasedID">
+          <name>PAYMENT_METHOD_ID</name>
+          <parent class="oracle.javatools.db.NameBasedID">
+            <name>SUPPLIERS</name>
+            <schemaName>FOXSTORE</schemaName>
+            <type>TABLE</type>
+          </parent>
+          <schemaName>FOXSTORE</schemaName>
+          <type>COLUMN</type>
+        </columnID>
+      </columnIDs>
+      <enabled>true</enabled>
+      <referenceID class="oracle.javatools.db.NameBasedID">
+        <name>PAYMENT_METHOD_ENUM_PK</name>
+        <parent class="oracle.javatools.db.NameBasedID">
+          <name>ENUM_PAYMENT_METHODS</name>
+          <schemaName>FOXSTORE</schemaName>
+          <type>TABLE</type>
+        </parent>
+        <schemaName>FOXSTORE</schemaName>
+        <type>CONSTRAINT</type>
+      </referenceID>
+    </constraint>
     <constraint class="oracle.javatools.db.PKConstraint">
       <name>SUPPLIER_PK</name>
       <columnIDs>
@@ -89,32 +202,6 @@
         <schemaName>FOXSTORE</schemaName>
         <type>INDEX</type>
       </indexID>
-    </constraint>
-    <constraint class="oracle.javatools.db.FKConstraint">
-      <name>SUPPLIER_FK1</name>
-      <columnIDs>
-        <columnID class="oracle.javatools.db.NameBasedID">
-          <name>PAYMENT_METHOD</name>
-          <parent class="oracle.javatools.db.NameBasedID">
-            <name>SUPPLIERS</name>
-            <schemaName>FOXSTORE</schemaName>
-            <type>TABLE</type>
-          </parent>
-          <schemaName>FOXSTORE</schemaName>
-          <type>COLUMN</type>
-        </columnID>
-      </columnIDs>
-      <enabled>true</enabled>
-      <referenceID class="oracle.javatools.db.NameBasedID">
-        <name>PAYMENT_METHOD_ENUM_PK</name>
-        <parent class="oracle.javatools.db.NameBasedID">
-          <name>ENUM_PAYMENT_METHODS</name>
-          <schemaName>FOXSTORE</schemaName>
-          <type>TABLE</type>
-        </parent>
-        <schemaName>FOXSTORE</schemaName>
-        <type>CONSTRAINT</type>
-      </referenceID>
     </constraint>
   </constraints>
   <indexes>

@@ -16,6 +16,12 @@
         </dataTypeID>
       </dataTypeUsage>
       <notNull>true</notNull>
+      <properties>
+        <entry>
+          <key>Comment</key>
+          <value class="java.lang.String">Код</value>
+        </entry>
+      </properties>
     </column>
     <column>
       <name>ID_ACTION</name>
@@ -31,14 +37,24 @@
         </dataTypeID>
       </dataTypeUsage>
       <notNull>true</notNull>
+      <properties>
+        <entry>
+          <key>Comment</key>
+          <value class="java.lang.String">Код акции</value>
+        </entry>
+      </properties>
     </column>
     <column>
-      <name>ID_QUOTATION</name>
+      <name>ID_QUOTATION_PRODUCT</name>
       <dataTypeUsage>
         <attributeValues>
           <entry>
             <key>precision</key>
             <value class="java.lang.String">18</value>
+          </entry>
+          <entry>
+            <key>scale</key>
+            <value class="java.lang.Long">0</value>
           </entry>
         </attributeValues>
         <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
@@ -46,6 +62,25 @@
         </dataTypeID>
       </dataTypeUsage>
       <notNull>true</notNull>
+      <properties>
+        <entry>
+          <key>Comment</key>
+          <value class="java.lang.String">Предложение по товару</value>
+        </entry>
+        <entry>
+          <key>OfflineDBConstants.IMPORT_SOURCE_ID</key>
+          <value class="oracle.javatools.db.ReferenceID">
+            <name>ID_QUOTATION_PRODUCT</name>
+            <parent class="oracle.javatools.db.ReferenceID">
+              <name>ACTION_OFFERS</name>
+              <identifier class="java.math.BigDecimal">76846</identifier>
+              <schemaName>FOXSTORE</schemaName>
+              <type>TABLE</type>
+            </parent>
+            <type>COLUMN</type>
+          </value>
+        </entry>
+      </properties>
     </column>
     <column>
       <name>ID_CUR</name>
@@ -61,6 +96,12 @@
         </dataTypeID>
       </dataTypeUsage>
       <notNull>true</notNull>
+      <properties>
+        <entry>
+          <key>Comment</key>
+          <value class="java.lang.String">Валюта</value>
+        </entry>
+      </properties>
     </column>
     <column>
       <name>ACTION_PRICE</name>
@@ -79,10 +120,176 @@
           <typeName>NUMBER</typeName>
         </dataTypeID>
       </dataTypeUsage>
-      <notNull>true</notNull>
+      <notNull>false</notNull>
+      <properties>
+        <entry>
+          <key>Comment</key>
+          <value class="java.lang.String">Цена акции</value>
+        </entry>
+      </properties>
+    </column>
+    <column>
+      <name>BONUS_QTY</name>
+      <dataTypeUsage>
+        <attributeValues>
+          <entry>
+            <key>precision</key>
+            <value class="java.lang.String">18</value>
+          </entry>
+          <entry>
+            <key>scale</key>
+            <value class="java.lang.Long">2</value>
+          </entry>
+        </attributeValues>
+        <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+          <typeName>NUMBER</typeName>
+        </dataTypeID>
+      </dataTypeUsage>
+      <notNull>false</notNull>
+      <properties>
+        <entry>
+          <key>Comment</key>
+          <value class="java.lang.String">Кол-во начисленных бонусов</value>
+        </entry>
+        <entry>
+          <key>OfflineDBConstants.IMPORT_SOURCE_ID</key>
+          <value class="oracle.javatools.db.ReferenceID">
+            <name>BONUS_QTY</name>
+            <parent class="oracle.javatools.db.ReferenceID">
+              <name>ACTION_OFFERS</name>
+              <identifier class="java.math.BigDecimal">76846</identifier>
+              <schemaName>FOXSTORE</schemaName>
+              <type>TABLE</type>
+            </parent>
+            <type>COLUMN</type>
+          </value>
+        </entry>
+      </properties>
+    </column>
+    <column>
+      <name>COMPLECT</name>
+      <dataTypeUsage>
+        <attributeValues>
+          <entry>
+            <key>precision</key>
+            <value class="java.lang.String">18</value>
+          </entry>
+          <entry>
+            <key>scale</key>
+            <value class="java.lang.Long">0</value>
+          </entry>
+        </attributeValues>
+        <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+          <typeName>NUMBER</typeName>
+        </dataTypeID>
+      </dataTypeUsage>
+      <notNull>false</notNull>
+      <properties>
+        <entry>
+          <key>Comment</key>
+          <value class="java.lang.String">Комплект</value>
+        </entry>
+        <entry>
+          <key>OfflineDBConstants.IMPORT_SOURCE_ID</key>
+          <value class="oracle.javatools.db.ReferenceID">
+            <name>COMPLECT</name>
+            <parent class="oracle.javatools.db.ReferenceID">
+              <name>ACTION_OFFERS</name>
+              <identifier class="java.math.BigDecimal">76846</identifier>
+              <schemaName>FOXSTORE</schemaName>
+              <type>TABLE</type>
+            </parent>
+            <type>COLUMN</type>
+          </value>
+        </entry>
+      </properties>
+    </column>
+    <column>
+      <name>IS_MAIN</name>
+      <dataTypeUsage>
+        <attributeValues>
+          <entry>
+            <key>precision</key>
+            <value class="java.lang.String">1</value>
+          </entry>
+          <entry>
+            <key>scale</key>
+            <value class="java.lang.Long">0</value>
+          </entry>
+        </attributeValues>
+        <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+          <typeName>NUMBER</typeName>
+        </dataTypeID>
+      </dataTypeUsage>
+      <notNull>false</notNull>
+      <properties>
+        <entry>
+          <key>Comment</key>
+          <value class="java.lang.String">Основной товар в комплекте</value>
+        </entry>
+        <entry>
+          <key>OfflineDBConstants.IMPORT_SOURCE_ID</key>
+          <value class="oracle.javatools.db.ReferenceID">
+            <name>IS_MAIN</name>
+            <parent class="oracle.javatools.db.ReferenceID">
+              <name>ACTION_OFFERS</name>
+              <identifier class="java.math.BigDecimal">76846</identifier>
+              <schemaName>FOXSTORE</schemaName>
+              <type>TABLE</type>
+            </parent>
+            <type>COLUMN</type>
+          </value>
+        </entry>
+      </properties>
     </column>
   </columns>
   <constraints>
+    <constraint class="oracle.javatools.db.FKConstraint">
+      <name>ACTION_OFFER$QUOTPROD</name>
+      <columnIDs>
+        <columnID class="oracle.javatools.db.NameBasedID">
+          <name>ID_QUOTATION_PRODUCT</name>
+          <parent class="oracle.javatools.db.NameBasedID">
+            <name>ACTION_OFFERS</name>
+            <schemaName>FOXSTORE</schemaName>
+            <type>TABLE</type>
+          </parent>
+          <schemaName>FOXSTORE</schemaName>
+          <type>COLUMN</type>
+        </columnID>
+      </columnIDs>
+      <enabled>true</enabled>
+      <onDeleteAction>NO_ACTION</onDeleteAction>
+      <properties>
+        <entry>
+          <key>OfflineDBConstants.IMPORT_SOURCE_ID</key>
+          <value class="oracle.javatools.db.ReferenceID">
+            <name>ACTION_OFFER$QUOTPROD</name>
+            <childObjectNames>
+              <childObjectName>ID_QUOTATION_PRODUCT</childObjectName>
+            </childObjectNames>
+            <parent class="oracle.javatools.db.ReferenceID">
+              <name>ACTION_OFFERS</name>
+              <identifier class="java.math.BigDecimal">76846</identifier>
+              <schemaName>FOXSTORE</schemaName>
+              <type>TABLE</type>
+            </parent>
+            <subType>FKConstraint</subType>
+            <type>CONSTRAINT</type>
+          </value>
+        </entry>
+      </properties>
+      <referenceID class="oracle.javatools.db.NameBasedID">
+        <name>QUOTATION_PK</name>
+        <parent class="oracle.javatools.db.NameBasedID">
+          <name>QUOTATIONS_PRODUCTS</name>
+          <schemaName>FOXSTORE</schemaName>
+          <type>TABLE</type>
+        </parent>
+        <schemaName>FOXSTORE</schemaName>
+        <type>CONSTRAINT</type>
+      </referenceID>
+    </constraint>
     <constraint class="oracle.javatools.db.FKConstraint">
       <name>ACTION_OFFER_FK1</name>
       <columnIDs>
@@ -135,32 +342,6 @@
         <type>CONSTRAINT</type>
       </referenceID>
     </constraint>
-    <constraint class="oracle.javatools.db.FKConstraint">
-      <name>ACTION_OFFER_FK3</name>
-      <columnIDs>
-        <columnID class="oracle.javatools.db.NameBasedID">
-          <name>ID_QUOTATION</name>
-          <parent class="oracle.javatools.db.NameBasedID">
-            <name>ACTION_OFFERS</name>
-            <schemaName>FOXSTORE</schemaName>
-            <type>TABLE</type>
-          </parent>
-          <schemaName>FOXSTORE</schemaName>
-          <type>COLUMN</type>
-        </columnID>
-      </columnIDs>
-      <enabled>true</enabled>
-      <referenceID class="oracle.javatools.db.NameBasedID">
-        <name>QUOTATION_PK</name>
-        <parent class="oracle.javatools.db.NameBasedID">
-          <name>QUOTATIONS_PRODUCTS</name>
-          <schemaName>FOXSTORE</schemaName>
-          <type>TABLE</type>
-        </parent>
-        <schemaName>FOXSTORE</schemaName>
-        <type>CONSTRAINT</type>
-      </referenceID>
-    </constraint>
     <constraint class="oracle.javatools.db.PKConstraint">
       <name>ACTION_OFFER_PK</name>
       <columnIDs>
@@ -202,6 +383,73 @@
         <name>FOXSTORE</name>
       </schema>
       <systemGenerated>true</systemGenerated>
+    </index>
+    <index>
+      <name>IDX_ACTION_OFFERS$ACTION</name>
+      <columnExpressions>
+        <columnExpression>
+          <expressionSource>ID_ACTION</expressionSource>
+          <orderType>ASC</orderType>
+          <properties>
+            <entry>
+              <key>OfflineDBConstants.IMPORT_SOURCE_ID</key>
+              <value class="oracle.javatools.db.ReferenceID">
+                <name>ID_ACTION</name>
+                <parent class="oracle.javatools.db.ReferenceID">
+                  <name>IDX_ACTION_OFFERS$ACTION</name>
+                  <identifier class="java.math.BigDecimal">79902</identifier>
+                  <parent class="oracle.javatools.db.ReferenceID">
+                    <name>ACTION_OFFERS</name>
+                    <identifier class="java.math.BigDecimal">76846</identifier>
+                    <schemaName>FOXSTORE</schemaName>
+                    <type>TABLE</type>
+                  </parent>
+                  <schemaName>FOXSTORE</schemaName>
+                  <type>INDEX</type>
+                </parent>
+                <type>IndexObject</type>
+              </value>
+            </entry>
+          </properties>
+        </columnExpression>
+      </columnExpressions>
+      <indexType>NORMAL</indexType>
+      <parallelDegree>1</parallelDegree>
+      <properties>
+        <entry>
+          <key>OfflineDBConstants.IMPORT_SOURCE_ID</key>
+          <value class="oracle.javatools.db.ReferenceID">
+            <name>IDX_ACTION_OFFERS$ACTION</name>
+            <identifier class="java.math.BigDecimal">79902</identifier>
+            <parent class="oracle.javatools.db.ReferenceID">
+              <name>ACTION_OFFERS</name>
+              <identifier class="java.math.BigDecimal">76846</identifier>
+              <schemaName>FOXSTORE</schemaName>
+              <type>TABLE</type>
+            </parent>
+            <schemaName>FOXSTORE</schemaName>
+            <type>INDEX</type>
+          </value>
+        </entry>
+        <entry>
+          <key>OracleStorageProperties</key>
+          <value class="oracle.javatools.db.ora.OracleStorageProperties">
+            <bufferMode>DEFAULT</bufferMode>
+            <initrans>2</initrans>
+            <logging>true</logging>
+            <percentFree>10</percentFree>
+            <tablespaceID class="oracle.javatools.db.ReferenceID">
+              <name>TS_FOXSTORE</name>
+              <type>TABLESPACE</type>
+            </tablespaceID>
+          </value>
+        </entry>
+      </properties>
+      <reverse>false</reverse>
+      <schema>
+        <name>FOXSTORE</name>
+      </schema>
+      <systemGenerated>false</systemGenerated>
     </index>
   </indexes>
   <properties>

@@ -36,6 +36,8 @@ export class CartService {
   public orderProducts: Array<ClientOrderProducts> = [];
   public loDeliveryOptions: Array<LoDeliveryOption>=[];
   public loResultDeliveryOptions: Array<LoDeliveryOption>=[];
+  min_loan_amt = 0;
+  max_loan_amt = 0;
   //public pmtMethod: EnumPaymentMethod = null;
 
   public loan: CreditCalc = null;
@@ -270,16 +272,19 @@ export class CartService {
     let maxLoan = this.localization['MaxLoan'] ? this.localization['MaxLoan'] : 'Максимальный лимит кредита перевышен';
     let minLoan = this.localization['MinLoan'] ? this.localization['MinLoan'] : 'Сумма кредита ниже лимита';
     let errs = [];
-    let mes = (loanAmt > AppConstants.MAX_LOAN_AMT) ? maxLoan : null;
+
+    let mes = (loanAmt > this.max_loan_amt) ? maxLoan : null;
     if (mes)
       errs.push(mes);
-    mes = (loanAmt < AppConstants.MIN_LOAN_AMT) ? minLoan : null;
+    mes = (loanAmt < this.min_loan_amt) ? minLoan : null;
     if (mes)
       errs.push(mes);
     return {isValid: !(errs.length > 0), validationErrors: errs};
   }
 
   async initCart() {
+    this.min_loan_amt = parseInt(await this.repo.getAppParam('MAX_LOAN_AMT'));
+    this.max_loan_amt = parseInt(await this.repo.getAppParam('MIN_LOAN_AMT'));
     //console.log('CartInit call. Is auth: '+ this.userService.isAuth);
     if (this.userService.isAuth) {
       this.order = await this.repo.getClientDraftOrder();

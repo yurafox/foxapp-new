@@ -92,6 +92,11 @@
                 (click)="onGetForLoan()"><span loc="Взять в кредит" name="GetForLoan">{{locale['GetForLoan']}}</span></button>
       </ion-col>
     </ion-row>
+    <ion-row *ngIf="actionsArr.length>0">
+      <ion-col>
+        <complect [actionsArr]="complectsArr" [mainProductId]="this.product.id"></complect>
+      </ion-col>
+    </ion-row>
 
   </ion-grid>
 

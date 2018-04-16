@@ -8,8 +8,8 @@ import {CustomPopupComponent} from '../../components/custom-popup/custom-popup';
 import {StorePlace} from '../../app/model/store-place';
 import {System} from '../../app/core/app-core';
 import {CreditCalcPage} from '../credit-calc/credit-calc';
-import {AppConstants} from '../../app/app-constants';
 import {EventService} from '../../app/service/event-service';
+import {ActionByProduct} from '../../app/model/action-by-product';
 
 @IonicPage()
 @Component({
@@ -21,9 +21,10 @@ export class ItemDetailPage extends ItemBase implements OnInit {
   qty = new System.FoxNumber();
   selectedStorePlace: StorePlace;
   reviews = new Array<ProductReview>();
-  minLoanAmt = AppConstants.MIN_LOAN_AMT;
-  maxLoanAmt = AppConstants.MAX_LOAN_AMT;
-  //description: string;
+  minLoanAmt = 0;
+  maxLoanAmt = 0;
+  actionsArr = new Array<ActionByProduct>();
+  complectsArr = new Array<ActionByProduct>();
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -56,6 +57,12 @@ export class ItemDetailPage extends ItemBase implements OnInit {
 
     if (this.userService.isAuth)
       this.repo.postProductView(this.product.id, null);
+
+    this.actionsArr = await this.repo.getActionsByProduct(this.product.id);
+    this.complectsArr = this.actionsArr.filter(x => ((x.complect) && ((x.actionType === 4) || (x.actionType === 5))));
+
+    this.minLoanAmt = parseInt(await this.repo.getAppParam('MIN_LOAN_AMT'));
+    this.maxLoanAmt = parseInt(await this.repo.getAppParam('MAX_LOAN_AMT'));
   }
 
   onShowProductDescription(): void {
