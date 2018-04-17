@@ -35,7 +35,7 @@ export class NoveltySketchComponent extends ComponentBase{
         this.product = await this._repo.getProductById(this.novelty.idProduct);
       }
     }
-    this.content=this.novelty.sketch_content;
+    if (this.novelty && this.novelty.sketch_content) this.content=this.novelty.sketch_content;
     this.evServ.events['noveltyPushEvent'].emit(this);
   }
 

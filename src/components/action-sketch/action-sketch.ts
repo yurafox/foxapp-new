@@ -32,7 +32,7 @@ export class ActionSketchComponent extends ComponentBase {
     if(!this.action) {
       this.action = await this._repo.getAction(this.innerId);
     }
-    if(this.action.sketch_content && this.dateEnd > new Date()) {
+    if(this.action && this.action.sketch_content && this.dateEnd > new Date()) {
       this.content=this.action.sketch_content;
     }
 

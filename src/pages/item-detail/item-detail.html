@@ -155,7 +155,7 @@
     </ion-row>
 
     <ion-row *ngFor="let rev of reviews; let i= index" (click)="onShowReviewClick(rev)">
-      <ion-item class="f-border-ligthgray" detail-push text-wrap>
+      <ion-item class="f-border-ligthgray" detail-push text-wrap *ngIf="i < 3">
         <item-review [review]=rev [displayTextLength]="200" [collapsibleMode]="false"></item-review>
       </ion-item>
     </ion-row>
