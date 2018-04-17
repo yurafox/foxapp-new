@@ -1,7 +1,7 @@
 <ion-header #header>
   <main-toolbar [host]="this"></main-toolbar>
   <search-btn #srch [hostPage]="this" (click)="onSearchClick()"></search-btn>
-  <!--<progress-bar *ngIf="pageMode === 3" [active]="srchService.inSearch"></progress-bar>-->
+  <progress-bar *ngIf="pageMode === 3" [active]="srchService.inSearch"></progress-bar>
   <filter #filter *ngIf="(pageMode === 3) && (srchService.products)" [srch]="srchService"></filter>
 </ion-header>
 

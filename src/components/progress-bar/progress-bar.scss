@@ -1,5 +1,6 @@
 progress-bar {
-  position: relative;
+  position: fixed;
+  width: 100%;
 
   .progress-bar {
     margin: 0;
@@ -7,6 +8,7 @@ progress-bar {
     padding: 0;
     width: 100%;
     overflow: visible;
+    position: relative;
   }
 
   .progress-bar span {

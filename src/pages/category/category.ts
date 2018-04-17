@@ -1,5 +1,5 @@
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import {ChangeDetectorRef, Component, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, DoCheck, ViewChild} from '@angular/core';
 import {ComponentBase} from '../../components/component-extension/component-base';
 import {AbstractDataRepository} from '../../app/service/repository/abstract/abstract-data-repository';
 import {SearchService} from '../../app/service/search-service';
@@ -12,7 +12,7 @@ import {Subscription} from "rxjs/Subscription";
   templateUrl: 'category.html',
 })
 
-export class CategoryPage extends ComponentBase {
+export class CategoryPage extends ComponentBase implements DoCheck {
 
   @ViewChild('cont') cont;
   @ViewChild('header') header;
@@ -28,6 +28,10 @@ export class CategoryPage extends ComponentBase {
   public updateScrollHeight() {
     const hdrH = (this.header) ?  this.header.nativeElement.scrollHeight : 0;
     this.scrollHeight = (window.screen.height) - hdrH;
+  }
+
+  ngDoCheck() {
+    this.updateScrollHeight();
   }
 
   async ngOnInit() {
