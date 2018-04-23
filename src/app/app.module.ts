@@ -200,7 +200,7 @@ import {Keyboard} from "@ionic-native/keyboard";
   ]
 })
 export class AppModule {
-  constructor(private injector: Injector) {
+  constructor(public injector: Injector) {
     RefInjector.push(this.injector);
   }
 }

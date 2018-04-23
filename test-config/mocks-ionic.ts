@@ -1,13 +1,9 @@
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import Promise = promise.Promise;
-import {promise} from "selenium-webdriver";
 
 export class PlatformMock {
-  public ready(): Promise<string> {
-    return new Promise((resolve) => {
-      resolve('READY');
-    });
+  public ready(): string {
+    return 'READY';
   }
 
   public getQueryParam() {
@@ -83,15 +79,11 @@ export class SplashScreenMock extends SplashScreen {
 export class NavMock {
 
   public pop(): any {
-    return new Promise(function(resolve: Function): void {
-      resolve();
-    });
+    return (() => true);
   }
 
   public push(): any {
-    return new Promise(function(resolve: Function): void {
-      resolve();
-    });
+    return (() => true);
   }
 
   public getActive(): any {

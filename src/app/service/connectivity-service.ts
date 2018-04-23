@@ -3,6 +3,7 @@ import 'rxjs/add/operator/map';
 import {Network} from "@ionic-native/network";
 import {AlertController, NavController} from "ionic-angular";
 import {NoConnectionPage} from "../../pages/no-connection/no-connection";
+import { Device } from '@ionic-native/device';
 
 @Injectable()
 export class ConnectivityService {
@@ -21,14 +22,14 @@ export class ConnectivityService {
     return this.count;
   }
 
-  constructor(private network: Network, private alertCtrl: AlertController) {
+  constructor(private network: Network, private alertCtrl: AlertController, private device: Device) {
     this.count = 0;
   }
 
   public checkConnection(error?: any) {
     let activePage = this.navCtrl ? this.navCtrl.getActive() : undefined;
     // <editor-fold desc="For browser testing only">
-    if (!this.network || !this.network.type) {
+    if (!this.device.cordova) {
       /*if (activePage && activePage.name !== 'NoConnectionPage') {
         this.showNoConnectionPage(error);
       }*/
@@ -36,26 +37,28 @@ export class ConnectivityService {
     }
     // </editor-fold>
 
-    if (this.network.type !== 'none') {
-      console.error(error.message ? error.message : error);
-      let alert = this.alertCtrl.create({
-        title: 'Ooops',
-        message: error.message ? error.message :  error,
-        buttons: [
-          {
-            text: 'OK'
-          }
-        ]
-      });
-      alert.present().catch((err) => console.log(`Alert error: ${err}`));
-      return;
-    } else if (this.network.type === 'none') {
-      if (activePage && activePage.name !== 'NoConnectionPage') {
-        this.showNoConnectionPage(error);
-      }
-    } else {
-      if (activePage && activePage.name !== 'NoConnectionPage') {
-        this.showNoConnectionPage(error);
+    if (this.device.cordova) {
+      if (this.network.type !== 'none') {
+        console.error(error.message ? error.message : error);
+        let alert = this.alertCtrl.create({
+          title: 'Ooops',
+          message: error.message ? error.message : error,
+          buttons: [
+            {
+              text: 'OK'
+            }
+          ]
+        });
+        alert.present().catch((err) => console.log(`Alert error: ${err}`));
+        return;
+      } else if (this.network.type === 'none') {
+        if (activePage && activePage.name !== 'NoConnectionPage') {
+          this.showNoConnectionPage(error);
+        }
+      } else {
+        if (activePage && activePage.name !== 'NoConnectionPage') {
+          this.showNoConnectionPage(error);
+        }
       }
     }
   }

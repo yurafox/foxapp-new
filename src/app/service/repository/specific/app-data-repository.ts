@@ -198,6 +198,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: POST method test
   public async postProductView(idProduct: number, params: string) {
     try {
       const response = await this.http
@@ -213,6 +214,7 @@ export class AppDataRepository extends AbstractDataRepository {
   }
 
 
+  // TODO: POST method test
   public async calculateCart(promoCode: string, maxBonusCnt: number, usePromoBonus: boolean, creditProductId: number,
                              cartContent: ClientOrderProducts[]):
       Promise<{clOrderSpecProdId: number, promoCodeDisc: number, bonusDisc: number, promoBonusDisc: number,
@@ -389,7 +391,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
-
+  // TODO: POST method test
   public async getDeliveryDate(order: ClientOrderProducts, loEntityId: number, loIdClientAddress: number): Promise<Date> {
     try {
       const response = await this.http
@@ -407,6 +409,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: POST method test
   public async getDeliveryCost(order: ClientOrderProducts, loEntityId: number, loIdClientAddress: number): Promise<number> {
     try {
       const response = await this.http
@@ -545,6 +548,7 @@ export class AppDataRepository extends AbstractDataRepository {
 
   }
 
+  // TODO: PUT method test
   public async saveClientDraftOrder(order: ClientOrder): Promise<ClientOrder> {
     try {
       const response = await this.http
@@ -619,7 +623,6 @@ export class AppDataRepository extends AbstractDataRepository {
         );
         return cClientOrder;
       }
-      ;
     } catch (err) {
       return await this.handleError(err);
     }
@@ -711,6 +714,7 @@ export class AppDataRepository extends AbstractDataRepository {
   }
 
 
+  // TODO: PUT method test
   public async postOrder(order: ClientOrder): Promise<{isSuccess: boolean, errorMessage: string}> {
     try {
       const response = await this.http
@@ -727,6 +731,7 @@ export class AppDataRepository extends AbstractDataRepository {
   }
 
 
+  // TODO: POST method test
   public async insertCartProduct(prod: ClientOrderProducts): Promise<ClientOrderProducts> {
     try {
       const response = await this.http
@@ -759,6 +764,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: PUT method test
   public async saveCartProduct(prod: ClientOrderProducts): Promise<ClientOrderProducts> {
     try {
       const response = await this.http
@@ -791,6 +797,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: DELETE method test
   public async deleteCartProduct(prod: ClientOrderProducts) {
     try {
       const response = await this.http
@@ -1119,6 +1126,7 @@ export class AppDataRepository extends AbstractDataRepository {
 
   }
 
+  // TODO: POST method test
   public async createClientAddress(address: ClientAddress): Promise<ClientAddress> {
     try {
       const response = await this.http
@@ -1152,6 +1160,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: DELETE method test
   public async deleteClientAddress(address: ClientAddress) {
     try {
       const response = await this.http
@@ -1165,6 +1174,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: PUT method test
   public async saveClientAddress(address: ClientAddress): Promise<ClientAddress> {
     try {
       const response = await this.http
@@ -1848,6 +1858,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: POST method test
   public async insertPerson(person: PersonInfo): Promise<PersonInfo> {
     try {
       let p = new PersonInfo();
@@ -1877,6 +1888,7 @@ export class AppDataRepository extends AbstractDataRepository {
   }
 
 
+  // TODO: PUT method test
   public async updatePerson(person: PersonInfo): Promise<PersonInfo> {
     try {
       let p = new PersonInfo();
@@ -2635,6 +2647,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: POST method test
   public async addFavoriteStore(idStore: number): Promise<number> {
     try {
       const response = await this.http.post(`${favoriteStoresUrl}/${idStore}`, idStore, RequestFactory.makeAuthHeader()).toPromise();
@@ -2651,6 +2664,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   };
 
+  // TODO: DELETE method test
   public async deleteFavoriteStore(idStore: number): Promise<number> {
     try {
       const response = await this.http.delete(`${favoriteStoresUrl}/${idStore}`, RequestFactory.makeAuthHeader()).toPromise();
@@ -2964,6 +2978,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: POST method test
   public async postClientPoolAnswers(pollAnswers: any): Promise<ClientPollAnswer> {
     try {
       const response = await this.http
@@ -3007,6 +3022,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: POST method test
   public async postDeviceData(deviceData: DeviceData) {
     try {
       const response = await this.http.post(deviceDataUrl, deviceData,RequestFactory.makeAuthHeader()).toPromise();
@@ -3166,6 +3182,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: POST method test
   public async postClientMessage(message: ClientMessage): Promise<ClientMessage> {
     try {
       const response = await this.http.post(clientMessageUrl, message, RequestFactory.makeAuthHeader()).toPromise();
@@ -3177,6 +3194,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: POST method test
   public async postProductReview(productReview: ProductReview): Promise<ProductReview> {
     try {
       const response = await this.http.post(postProductReviewUrl, productReview, RequestFactory.makeAuthHeader())
@@ -3189,6 +3207,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: POST method test
   public async postStoreReview(storeReview: StoreReview): Promise<StoreReview> {
     try {
       const response = await this.http.post(postStoreReviewUrl, storeReview, RequestFactory.makeAuthHeader())
@@ -3201,6 +3220,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: POST method test
   public async updateProductReview(productReview: ProductReview): Promise<ProductReview> {
     try {
       const response = await this.http.post(updateProductReviewUrl, productReview,RequestFactory.makeAuthHeader()).toPromise();
@@ -3212,6 +3232,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  // TODO: POST method test
   public async updateStoreReview(storeReview: StoreReview): Promise<StoreReview> {
     try {
       const response = await this.http.post(updateStoreReviewUrl, storeReview,RequestFactory.makeAuthHeader()).toPromise();
