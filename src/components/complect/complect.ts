@@ -4,8 +4,9 @@ import { Slides } from 'ionic-angular';
 import {ComponentBase} from '../component-extension/component-base';
 import {ActionByProduct} from '../../app/model/action-by-product';
 import {AbstractDataRepository} from '../../app/service/repository/abstract/abstract-data-repository';
+import {CartService} from '../../app/service/cart-service';
 
-class ComplectOptionItem {
+export class ComplectOptionItem {
   constructor(
     public title: string,
     public idAction: number,
@@ -16,11 +17,13 @@ class ComplectOptionItem {
     public secondProductName: string,
     public secondProductId: number,
     public mainProductActionPrice?: number,
-    public mainProductRegularPrice?: number
+    public mainProductRegularPrice?: number,
+    public mainProductQP?: number,
+    public secondProductQP?: number
   ){}
 }
 
-class ComplectItem {
+export class ComplectItem {
   _selIndex: number = 0;
 
   constructor(
@@ -89,7 +92,7 @@ export class ComplectComponent extends ComponentBase {
 
   get mainProductId(): number {return this._mainProductId};
 
-  constructor(private repo: AbstractDataRepository, public navCtrl: NavController) {
+  constructor(private repo: AbstractDataRepository, public navCtrl: NavController, private cart: CartService) {
     super();
   }
 
@@ -122,14 +125,15 @@ export class ComplectComponent extends ComponentBase {
       ga.forEach(z => {
         let mp = this.actionsArr.filter(g => (g.complect === z.complect) && (g.idProduct === this.mainProductId))[0];
         x.variants.push(new ComplectOptionItem(z.title, z.actionId, z.complect, z.actionPrice, z.regularPrice,
-                                        z.imgUrl, z.productName, z.idProduct, mp.actionPrice, mp.regularPrice));
+                                        z.imgUrl, z.productName, z.idProduct, mp.actionPrice, mp.regularPrice,
+                                        mp.idQuotationProduct, z.idQuotationProduct));
       });
 
     });
 
   }
 
-  scrollOptions(item: ComplectItem, distance: number): void {
+  onScrollOptions(item: ComplectItem, distance: number): void {
     item.selIndex = item.selIndex + distance;
   }
 
@@ -148,16 +152,12 @@ export class ComplectComponent extends ComponentBase {
     return this.getRegularPrice(item) - this.getActionPrice(item);
   }
 
-  async viewProduct(item: ComplectItem) {
+  async onOpenItemDetail(item: ComplectItem) {
     let prod = await this.repo.getProductById(item.variants[item.selIndex].secondProductId);
     this.navCtrl.push('ItemDetailPage', {prod: prod, loadQuotes: true});
   }
 
-  next() {
-    this.slides.slideNext();
-  }
-
-  prev() {
-    this.slides.slidePrev();
+  async onAddToCart(item: ComplectItem) {
+    await this.cart.addComplect(item, 1, this.navCtrl.getActive().instance);
   }
 }

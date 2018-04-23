@@ -58,6 +58,9 @@ import {OrdersFilter} from '../../../../pages/your-orders/your-orders';
 //PRODUCTION URLS
 const productDescriptionsUrl = `${AppConstants.BASE_URL}/api/product/getProductDescription`;
 const productsUrl = `${AppConstants.BASE_URL}/api/product`;
+const productsOfDayUrl = `${AppConstants.BASE_URL}/api/action/GetProductsOfDay`;
+const productsSalesHitsUrl = `${AppConstants.BASE_URL}/api/action/GetProductsSalesHits`;
+
 const currenciesUrl = `${AppConstants.BASE_URL}/api/currency`;
 const manufacturersUrl = `${AppConstants.BASE_URL}/api/manufacturer`;
 const quotationProductsUrl = `${AppConstants.BASE_URL}/api/quotationproduct`;
@@ -66,6 +69,7 @@ const measureUnitUrl = `${AppConstants.BASE_URL}/api/measureUnit`;
 const LangUrl = `${AppConstants.BASE_URL}/api/localization/lang`;
 const countriesUrl = `${AppConstants.BASE_URL}/api/geo/country`;
 const citiesUrl = `${AppConstants.BASE_URL}/api/geo/city`;
+const citiesWithStoresUrl = `${AppConstants.BASE_URL}/api/geo/citiesWithStores`;
 const regionsUrl = `${AppConstants.BASE_URL}/api/geo/region`;
 const getPaymentMethodsUrl = `${AppConstants.BASE_URL}/api/fin/pmtmethod`;
 const loEntitiesUrl = `${AppConstants.BASE_URL}/api/lo/loentity`;
@@ -86,8 +90,9 @@ const productSupplCreditGradesUrl = `${AppConstants.BASE_URL}/api/credit/GetProd
 const postProductViewUrl = `${AppConstants.BASE_URL}/api/client/LogProductView`;
 const clientAddressesUrl = `${AppConstants.BASE_URL}/api/client/clientAddress`;
 const clientOrderSpecProductsUrl = `${AppConstants.BASE_URL}/api/Cart/GetCartProductsByOrderId`;
+const clientOrderHistSpecProductsUrl = `${AppConstants.BASE_URL}/api/Cart/GetClientHistProductsByOrderId`;
 const clientOrdersUrl = `${AppConstants.BASE_URL}/api/Cart/clientOrder`;
-const citiesWithStoresUrl = `${AppConstants.BASE_URL}/api/geo/citiesWithStores`;
+const clientHistOrdersUrl = `${AppConstants.BASE_URL}/api/Cart/clientHistOrder`;
 const getDeliveryCostUrl = `${AppConstants.BASE_URL}/api/lo/GetDeliveryCost`;
 const getDeliveryDateUrl = `${AppConstants.BASE_URL}/api/lo/GetDeliveryDate`;
 const calculateCartUrl = `${AppConstants.BASE_URL}/api/cart/calculateCart`;
@@ -118,6 +123,8 @@ const clientOrderDatesRangeUrl = `${AppConstants.BASE_URL}/api/client/OrderDates
 const clientOrderProductsByDateUrl = `${AppConstants.BASE_URL}/api/cart/ClientOrderProductsByDate`;
 const getCurrencyRate = `${AppConstants.BASE_URL}/api/currency/rate`;
 const getActionsByProductUrl = `${AppConstants.BASE_URL}/api/action/GetProductActions`;
+const getProductsByActionUrl = `${AppConstants.BASE_URL}/api/product/GetByAction`;
+const categoriesUrl = AppConstants.USE_PRODUCTION ? `${AppConstants.BASE_URL}/api/catalog`:"/api/mcategories";
 //DEV URLS
 // const productDescriptionsUrl = 'api/mproductDescriptions';
 // const currenciesUrl = "/api/mcurrencies";
@@ -160,11 +167,6 @@ const getActionsByProductUrl = `${AppConstants.BASE_URL}/api/action/GetProductAc
 // const noveltyDynamicUrl = "/api/mnovelties";
 // const noveltyDetailsDynamicUrl = "/api/mnoveltyDetails";
 // const deviceDataUrl = "/api/mdeviceData";
-
-const actionOffersUrl = "/api/mactionOffers";
-
-const categoriesUrl = AppConstants.USE_PRODUCTION ? `${AppConstants.BASE_URL}/api/catalog`:"/api/mcategories";
-
 // </editor-fold
 
 @Injectable()
@@ -213,24 +215,24 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
-
   // TODO: POST method test
-  public async calculateCart(promoCode: string, maxBonusCnt: number, usePromoBonus: boolean, creditProductId: number,
-                             cartContent: ClientOrderProducts[]):
+  public async calculateCart(promoCode: string, maxBonusCnt: number, usePromoBonus: boolean, creditProductId: number/*,
+                             cartContent: ClientOrderProducts[]*/):
       Promise<{clOrderSpecProdId: number, promoCodeDisc: number, bonusDisc: number, promoBonusDisc: number,
-               earnedBonus: number}[]>
+               earnedBonus: number, qty: number}[]>
   {
     try {
+      /*
       let _dtoContent = [];
       cartContent.forEach(i => {
           _dtoContent.push(i.dto);
         }
       );
-
+    */
       const response = await this.http
         .post(calculateCartUrl, {promoCode: promoCode, maxBonusCnt: maxBonusCnt,
-                                      usePromoBonus: usePromoBonus, creditProductId: creditProductId,
-                                      cartContent: _dtoContent}
+                                      usePromoBonus: usePromoBonus, creditProductId: creditProductId /*,
+                                      cartContent: _dtoContent*/}
              ,RequestFactory.makeAuthHeader())
         .toPromise();
       const val = response.json();
@@ -242,7 +244,7 @@ export class AppDataRepository extends AbstractDataRepository {
       if (val) {
         val.forEach(i => {
           _res.push({clOrderSpecProdId: i.clOrderSpecProdId, promoCodeDisc: i.promoCodeDisc,
-            bonusDisc: i.bonusDisc, promoBonusDisc: i.promoBonusDisc, earnedBonus: i.earnedBonus});
+            bonusDisc: i.bonusDisc, promoBonusDisc: i.promoBonusDisc, earnedBonus: i.earnedBonus, qty: i.qty});
         });
       }
       return _res;
@@ -674,6 +676,7 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+
   public async getClientOrderById(orderId: number): Promise<ClientOrder> {
     try {
 
@@ -713,6 +716,47 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
+  public async getClientHistOrderById(orderId: number): Promise<ClientOrder> {
+    try {
+
+      const response = await this.http
+        .get(clientHistOrdersUrl + `/${orderId}`, RequestFactory.makeAuthHeader())
+        .toPromise();
+
+      const data = response.json();
+      if (response.status !== 200) {
+        throw new Error("server side status error");
+      }
+
+      if (data != null) {
+        return new ClientOrder(
+          data.id,
+          data.orderDate,
+          data.idCur,
+          data.idClient,
+          data.total,
+          data.idPaymentMethod,
+          data.idPaymentStatus,
+          data.idStatus,
+          null,
+          data.loIdEntity,
+          data.loIdClientAddress,
+          data.itemsTotal,
+          data.shippingTotal,
+          data.bonusTotal,
+          data.promoBonusTotal,
+          data.bonusEarned,
+          data.promoCodeDiscTotal,
+          data.idPerson,
+          null,
+          data.clientHistFIO,
+          data.clientHistAddress
+        );
+      };
+    } catch (err) {
+      return await this.handleError(err);
+    }
+  }
 
   // TODO: PUT method test
   public async postOrder(order: ClientOrder): Promise<{isSuccess: boolean, errorMessage: string}> {
@@ -758,6 +802,10 @@ export class AppDataRepository extends AbstractDataRepository {
       p.errorMessage = val.errorMessage;
       p.warningMessage = val.warningMessage;
       p.warningRead = val.warningRead;
+      p.complect = val.complect;
+      p.idAction = val.idAction;
+      p.actionList = val.actionList;
+      p.actionTitle = val.actionTitle;
       return p;
     } catch (err) {
       return await this.handleError(err);
@@ -791,6 +839,11 @@ export class AppDataRepository extends AbstractDataRepository {
       p.errorMessage = val.errorMessage;
       p.warningMessage = val.warningMessage;
       p.warningRead = val.warningRead;
+      p.complect = val.complect;
+      p.idAction = val.idAction;
+      p.actionList = val.actionList;
+      p.actionTitle = val.actionTitle;
+
       return p;
     } catch (err) {
       return await this.handleError(err);
@@ -843,6 +896,10 @@ export class AppDataRepository extends AbstractDataRepository {
           p.payPromoBonusCnt = val.payPromoBonusCnt;
           p.earnedBonusCnt = val.earnedBonusCnt;
           p.warningRead = val.warningRead;
+          p.complect = val.complect;
+          p.idAction = val.idAction;
+          p.actionList = val.actionList;
+          p.actionTitle = val.actionTitle;
 
           cClientOrderProducts.push(p);
         });
@@ -886,6 +943,10 @@ export class AppDataRepository extends AbstractDataRepository {
         p.payPromoBonusCnt = i.payPromoBonusCnt;
         p.earnedBonusCnt = i.earnedBonusCnt;
         p.warningRead = i.warningRead;
+        p.complect = i.complect;
+        p.idAction = i.idAction;
+        p.actionList = i.actionList;
+        p.actionTitle = i.actionTitle;
         orderProducts.push(p);
       });
       return orderProducts;
@@ -894,6 +955,52 @@ export class AppDataRepository extends AbstractDataRepository {
     }
 
   }
+
+  public async getClientHistOrderProductsByOrderId(orderId: number): Promise<ClientOrderProducts[]> {
+    try {
+      const response = await this.http
+        .get(clientOrderHistSpecProductsUrl,RequestFactory.makeSearch([
+          {key: "idOrder", value: orderId.toString()}
+        ])).toPromise();
+
+      let orderProducts = [];
+      const val = response.json();
+      if (response.status !== 200) {
+        throw new Error("server side status error");
+      }
+      val.forEach(i => {
+        let p = new ClientOrderProducts();
+        p.id = i.id;
+        p.idOrder = i.idOrder;
+        p.idQuotationProduct = i.idQuotationProduct;
+        p.price = i.price;
+        p.qty = i.qty;
+        p.idStorePlace = i.idStorePlace;
+        p.idLoEntity = i.idLoEntity;
+        p.loTrackTicket = i.loTrackTicket;
+        p.loDeliveryCost = i.loDeliveryCost;
+        p.loDeliveryCompleted = i.loDeliveryCompleted;
+        p.loEstimatedDeliveryDate = i.loEstimatedDeliveryDate;
+        p.loDeliveryCompletedDate = i.loDeliveryCompletedDate;
+        p.errorMessage = i.errorMessage;
+        p.payPromoCode = i.payPromoCode;
+        p.payPromoCodeDiscount = i.payPromoCodeDiscount;
+        p.payBonusCnt = i.payBonusCnt;
+        p.payPromoBonusCnt = i.payPromoBonusCnt;
+        p.earnedBonusCnt = i.earnedBonusCnt;
+        p.warningRead = i.warningRead;
+        p.complect = i.complect;
+        p.idAction = i.idAction;
+        p.actionList = i.actionList;
+        p.actionTitle = i.actionTitle;
+        orderProducts.push(p);
+      });
+      return orderProducts;
+    } catch (err) {
+      return await this.handleError(err);
+    }
+  }
+
 
   public async getProductReviewsByProductId(productId: number): Promise<ProductReview[]> {
     try {
@@ -1361,7 +1468,7 @@ export class AppDataRepository extends AbstractDataRepository {
   public async loadCityCache() {
     try {
       const response = await this.http
-        .get(citiesUrl,RequestFactory.makeAuthHeader()).toPromise();
+        .get(citiesWithStoresUrl,RequestFactory.makeAuthHeader()).toPromise();
 
       let data: any = response.json();
       if (response.status !== 200) {
@@ -1471,10 +1578,11 @@ export class AppDataRepository extends AbstractDataRepository {
   public async getCityById(id: number): Promise<City> {
     if (!id) return null;
     try {
-      const city: City = new City();
+      let city: City = new City(id);
       const _id: string = id.toString();
       //let city = null;
       if (this.isEmpty(this.cache.City.Item(_id))) {
+        this.cache.City.Add(_id, city);
         // http request
         const response = await this.http.get(citiesUrl + `/${_id}`,RequestFactory.makeAuthHeader()).toPromise();
 
@@ -1488,9 +1596,10 @@ export class AppDataRepository extends AbstractDataRepository {
           city.id = id;
           city.name = data.name;
           city.idRegion = data.idRegion;
-
-          // add to cache
-          this.cache.City.Add(_id, city);
+        }
+        else {
+          this.cache.City.Remove(_id);
+          city = null;
         }
         return city;
       } else {
@@ -1652,7 +1761,8 @@ export class AppDataRepository extends AbstractDataRepository {
               val.supplOffers,
               val.description,
               val.slideImageUrls,
-              val.barcode
+              val.barcode,
+              val.valueQP
             );
 
             products.push(productItem);
@@ -1788,14 +1898,68 @@ export class AppDataRepository extends AbstractDataRepository {
       prod.description = data.description;
       prod.slideImageUrls = data.slideImageUrls;
       prod.barcode = data.barcode;
+      prod.valueQP = data.valueQP;
+      prod.oldPrice = data.oldPrice;
+      prod.bonuses = data.bonuses;
       return prod;
     }
     else return null;
   }
 
-  public async getProductById(productId: number): Promise<Product> {
+
+  public async getProductsOfDay(): Promise<number[]> {
     try {
-      const prod: Product = new Product();
+      const res = [];
+      // http request
+      const response = await this.http
+        .get(productsOfDayUrl,RequestFactory.makeAuthHeader())
+        .toPromise();
+
+      // response data binding
+      let data: any = response.json();
+
+      if (response.status !== 200) {
+        throw new Error("server side status error");
+      }
+
+      data.forEach(val =>
+        res.push(val)
+      );
+      return res;
+    } catch (err) {
+      return await this.handleError(err);
+    }
+  }
+
+  public async getProductsSalesHits(): Promise<number[]> {
+    try {
+      const res = [];
+      // http request
+      const response = await this.http
+        .get(productsSalesHitsUrl,RequestFactory.makeAuthHeader())
+        .toPromise();
+
+      // response data binding
+      let data: any = response.json();
+
+      if (response.status !== 200) {
+        throw new Error("server side status error");
+      }
+
+      data.forEach(val =>
+        res.push(val)
+      );
+      return res;
+    } catch (err) {
+      return await this.handleError(err);
+    }
+  }
+
+
+  public async getProductById(productId: number): Promise<Product> {
+    if (!productId) return null;
+    try {
+      let prod: Product = new Product(productId);
       const id: string = productId.toString();
       // <editor-fold desc="id in cache is empty">
       if (this.isEmpty(this.cache.Products.Item(id))) {
@@ -1812,10 +1976,25 @@ export class AppDataRepository extends AbstractDataRepository {
         if (response.status !== 200) {
           throw new Error("server side status error");
         }
+        const _prod = this.getProductFromResponse(data);
 
-        let prod1 = this.getProductFromResponse(data);
-        this.cache.Products.Add(id, prod1);
-        return prod1;
+        prod.id = _prod.id;
+        prod.name = _prod.name;
+        prod.price = _prod.price;
+        prod.manufacturerId = _prod.manufacturerId;
+        prod.props = _prod.props;
+        prod.imageUrl = _prod.imageUrl;
+        prod.rating = _prod.rating;
+        prod.recall = _prod.recall;
+        prod.supplOffers = _prod.supplOffers;
+        prod.description = _prod.description;
+        prod.slideImageUrls = _prod.slideImageUrls;
+        prod.barcode = _prod.barcode;
+        prod.valueQP = _prod.valueQP;
+        prod.oldPrice = _prod.oldPrice;
+        prod.bonuses = _prod.bonuses;
+
+        return prod;
       } else {
         // </editor-fold>
         return this.cache.Products.Item(id);
@@ -1826,8 +2005,9 @@ export class AppDataRepository extends AbstractDataRepository {
   }
 
   public async getQuotationById(quotationId: number): Promise<Quotation> {
+    if (!quotationId) return null;
     try {
-      let quotation: Quotation = new Quotation();
+      let quotation: Quotation = new Quotation(quotationId);
       const id: string = quotationId.toString();
       if (this.isEmpty(this.cache.Quotation.Item(id))) {
         this.cache.Quotation.Add(id, quotation);
@@ -2718,7 +2898,12 @@ export class AppDataRepository extends AbstractDataRepository {
           data.priority,
           data.sketch_content,
           data.action_content,
-          (data.isActive) ? true:false
+          (data.isActive) ? true:false,
+          data.id_type,
+          data.badge_url,
+          data.id_supplier,
+          data.title,
+          (data.is_landing)? true:false
         );
       }
       return action;
@@ -2746,7 +2931,12 @@ export class AppDataRepository extends AbstractDataRepository {
             val.priority,
             val.sketch_content,
             val.action_content,
-            (data.isActive) ? true:false
+            (data.isActive) ? true:false,
+            data.id_type,
+            data.badge_url,
+            data.id_supplier,
+            data.title,
+           (data.is_landing)? true:false
           );
 
           actions.push(actionItem);
@@ -2758,26 +2948,46 @@ export class AppDataRepository extends AbstractDataRepository {
     }
   }
 
-  public async getActionOffersByActionId(idAction: number): Promise<ActionOffer[]> {
+  public async getProductsByActionId(actionId: number):  Promise<Product[]> {
     try {
-      const response = await this.http
-        .get(actionOffersUrl,RequestFactory.makeSearch([
-          {key: "idAction", value: idAction.toString()}
-        ])).toPromise();
+        const response = await this.http
+          .get(`${getProductsByActionUrl}/${actionId}`,RequestFactory.makeAuthHeader())
+          .toPromise();
 
-      const data = response.json();
-      if (response.status !== 200) {
-        throw new Error("server side status error");
-      }
-      const aOffers = new Array<ActionOffer>();
-      if (data != null) {
-        data.forEach(val =>
-          aOffers.push(
-            new ActionOffer(val.id, val.idAction, val.idQuotation, val.idCur)
-          )
-        );
-      }
-      return aOffers;
+        const data = response.json();
+        if (response.status !== 200) {
+          throw new Error("server side status error");
+        }
+        const products = new Array<Product>();
+        if (data != null) {
+          data.forEach(val => {
+            let props = new Array<ProductPropValue>();
+            if (val.props && val.props.length !== 0) {
+              props = this.getPropValuefromProduct(val);
+            }
+
+            // create current product
+            const productItem: Product = new Product(
+              val.id,
+              val.name,
+              val.price,
+              val.oldPrice,
+              val.bonuses,
+              val.manufacturerId,
+              props,
+              val.imageUrl,
+              val.rating,
+              val.recall,
+              val.supplOffers,
+              val.description,
+              val.slideImageUrls,
+              val.barcode
+            );
+
+            products.push(productItem);
+          });
+        }
+        return products;
     } catch (err) {
       return await this.handleError(err);
     }

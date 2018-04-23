@@ -1,9 +1,9 @@
 <ion-header>
   <main-toolbar></main-toolbar>
 </ion-header>
-<ion-content >
+<ion-content>
   <ion-grid class="f-item-nopadding-tb">
-    <ion-row>
+    <ion-row *ngIf="product.rating || product.recall>0">
       <ion-col text-end>
         <product-rating [product]=product></product-rating>
       </ion-col>
@@ -36,7 +36,7 @@
     </ion-row>
     <ion-row>
       <ion-col class="f-item-nopadding f-padding-l-5 f-item-padding-bottom f-price" >
-        <span>{{product.price | localeCurrency:userService.currency}}</span>
+        <span class="f-product-price">{{product.price | localeCurrency:userService.currency}}</span>
       </ion-col>
     </ion-row>
     <ion-row *ngIf="product.bonuses">
@@ -64,8 +64,8 @@
     <ion-row *ngIf="selectedStorePlace">
       <ion-col>
         <span class="f-item-nopadding"><span loc="Заберите бесплатно в" name="FreePickupAt">{{locale['FreePickupAt']}}</span></span>
-        <span class="f-color-green f-item-nopadding">{{selectedStorePlace.name}}, {{selectedStorePlace.address_line}}
-          {{selectedStorePlace?.city?.name}} </span>
+        <span class="f-color-green f-item-nopadding">{{selectedStorePlace?.city?.name}}, {{selectedStorePlace.address_line}}
+        </span>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -142,9 +142,9 @@
     <ion-row (click)="onShowReviewsClick({reviews: reviews, product: product})">
       <ion-item class="f-border-ligthgray" detail-push text-wrap>
         <b class="f-size-larger">{{reviews.length}} <span loc="отзывов покупателей" name="customerReviews">{{locale['customerReviews']}}</span></b><br>
-        <rating class="rating-large" [ngModel]="product.rating"
-                readOnly="true">
-        </rating>
+          <rating class="rating-large" [ngModel]="product.rating"
+                  readOnly="true">
+          </rating>
       </ion-item>
     </ion-row>
 

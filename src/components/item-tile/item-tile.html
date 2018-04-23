@@ -1,0 +1,38 @@
+<div class="f-div-item-tile">
+  <ion-grid class="f-no-padding" (click)="openItemDetails(product)" *ngIf="product">
+    <ion-row>
+      <ion-col col-auto>
+        <div *ngIf="product && product?.imageUrl" lazy-load-images>
+          <img class="f-img-item-tile" [attr.data-src]="product?.imageUrl" onError="this.src='assets/imgs/nophoto.png';">
+        </div>
+        <img *ngIf="product && !product.imageUrl" class="f-img-item-tile" src="assets/imgs/nophoto.png">
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="f-item-col f-color-info f-item-tile-name">
+        {{product?.name | truncate : 40 }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="product.rating || product.recall>0">
+      <ion-col nowrap class="f-item-col">
+        <product-rating [product]=product></product-rating>
+      </ion-col>
+    </ion-row>
+
+    <div class="f-padding-t-5">
+      <ion-row *ngIf="product.oldPrice">
+        <ion-col class="f-item-col f-old-price f-size-small" >
+          <span>{{product.oldPrice | localeCurrency:userService.currency}}</span>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="product.price" >
+        <ion-col class="f-item-col  f-product-price-item-tile">
+          {{product.price | localeCurrency:userService.currency}}
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-grid>
+</div>

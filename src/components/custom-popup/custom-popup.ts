@@ -46,7 +46,8 @@ export class CustomPopupComponent extends ComponentBase {
   async selectPickupStorePlace(sPlace: ProductStorePlace) {
     let sp = await (<any>sPlace).storeplace;
     let title = this.locale['AlertTitle'];
-    let message = this.locale['AlertMessage'] + ' ' + sp.name;
+    const param1 = sp.name;
+    let message = eval('`'+ this.locale['AlertMessage'] +'`');
     let cancel = this.locale['Cancel'];
     let alert = this.alertCtrl.create({
       title: title,

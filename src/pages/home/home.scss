@@ -1,11 +1,28 @@
-.ion-slides {
-  height: auto;
-}
+page-home {
 
-.f-item-gray {
-  color: color($colors, gray);
-}
+  /*
+  .content {
+    background-color: #dbdde1;
+  }
+  */
 
+  .f-bkg-div {
+    background-color: #dbdde1;
+  }
+
+  .ion-slides {
+    height: auto;
+  }
+
+  .f-item-gray {
+    color: color($colors, gray);
+  }
+
+  .f-day-deals-scroll {
+    width:100vw;
+    height:220px;
+  }
+}
 /*
 page-home,
 .home {

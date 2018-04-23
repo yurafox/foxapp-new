@@ -6,6 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class TruncatePipe implements PipeTransform {
 
   transform(value: string, args: string) : string {
+    if (!value) return null;
     const limit = args ? parseInt(args, 10) : -1;
     let trail = '...';
     if (value.length < limit)

@@ -97,7 +97,7 @@ export class CheckoutPage extends ComponentBase {
     };
   }
 
-  onAfterQtyUpdate(item: any, objRef:any): void {
+  async onAfterQtyUpdate(item: any, objRef:any) {
     let j = 0;
     for (let i of this.cart.loResultDeliveryOptions) {
       if (i.idClientOrderProduct === objRef.id)  {
@@ -106,11 +106,13 @@ export class CheckoutPage extends ComponentBase {
       j++;
     }
 
+
+    //TODO пересчитать стоимость логистики для всех товаров комплекта!!
     this.repo.getDeliveryCost(objRef, this.cart.loResultDeliveryOptions[j].loEntityId, this.cart.order.loIdClientAddress).then(r => {
         this.cart.loResultDeliveryOptions[j].deliveryCost = r;
       }
     );
-    this.cart.updateItem(objRef);
+    await this.cart.updateItem(objRef);
     this.evServ.events['cartUpdateEvent'].emit();
   }
 

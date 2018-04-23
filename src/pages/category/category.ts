@@ -1,5 +1,5 @@
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import {ChangeDetectorRef, Component, DoCheck, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component,DoCheck, ViewChild} from '@angular/core';
 import {ComponentBase} from '../../components/component-extension/component-base';
 import {AbstractDataRepository} from '../../app/service/repository/abstract/abstract-data-repository';
 import {SearchService} from '../../app/service/search-service';

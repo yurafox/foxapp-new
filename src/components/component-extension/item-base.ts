@@ -47,19 +47,11 @@ export class ItemBase extends ComponentBase implements OnInit {
     if (this.preloadQuotes) {
       if (this.product && this.product.id) {
         this.quotes = await this.repo.getQuotationProductsByProductId(this.product.id);
-        this._noOfQuotes = this.quotes.filter((i) => {
+        this._noOfQuotes = this.quotes.filter(i => {
           return (i.stockQuant > 0);
         }).length;
 
-        // Возвращаем предложение с минимальной ценой
-        this.valueQuot = this.quotes.sort((x, y) => {
-          return (x.price - y.price);
-        })
-          .find((i) => {
-            return (i.stockQuant > 0)
-          });
-
-        //this.valueQuot = await this.repo.getValueQuotByProduct(this.product.id);
+        this.valueQuot = this.quotes.find(i => {return i.id === this.product.valueQP});
       }
     }
     if (this.valueQuot) {

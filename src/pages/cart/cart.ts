@@ -1,11 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, DoCheck} from '@angular/core';
 import {NavController, IonicPage, AlertController} from 'ionic-angular';
 import {ComponentBase} from '../../components/component-extension/component-base';
 import {CartService} from '../../app/service/cart-service';
 import {SelectShipAddressPage} from '../select-ship-address/select-ship-address';
 import {UserService} from '../../app/service/bll/user-service';
 import {LoginPage} from '../login/login';
-import has = Reflect.has;
 
 @IonicPage()
 @Component({
@@ -13,15 +12,20 @@ import has = Reflect.has;
   templateUrl: 'cart.html'
 })
 
-export class CartPage extends ComponentBase {
+export class CartPage extends ComponentBase implements DoCheck {
 
   constructor(public cart: CartService, private navCtrl: NavController,
               private uService: UserService, private alertCtrl: AlertController) {
     super();
   }
 
+  ngDoCheck() {
+
+  }
+
   onDeleteItem(itemIndex: number) {
     this.cart.removeItem(itemIndex);
+    this.ngDoCheck();
   }
 
   async onShowWarningsClick() {
@@ -74,6 +78,29 @@ export class CartPage extends ComponentBase {
   async onAfterQtyUpdate(item: any, objRef: any) {
     await this.cart.updateItem(objRef);
     this.evServ.events['cartUpdateEvent'].emit();
+    this.ngDoCheck();
+  }
+
+
+  isFirstComplectItem(i: number): boolean {
+    const op = this.cart.displayOrderProducts[i];
+    return (op.orderProduct.complect) && !(op.prevComplect === op.orderProduct.complect);
+  }
+
+  isLastComplectItem(i: number): boolean {
+    const op = this.cart.displayOrderProducts[i];
+    return (op.orderProduct.complect)
+      && (op.prevComplect === op.orderProduct.complect);
+  }
+
+  isComplectDivisorItem(i: number): boolean {
+    if (i === 0) return false;
+    if (i === this.cart.displayOrderProducts.length-1) return false;
+
+    const thisOp = this.isFirstComplectItem(i);
+    const prevOp = this.isLastComplectItem(i-1);
+
+    return (thisOp) && (prevOp);
   }
 
 }

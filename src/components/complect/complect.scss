@@ -12,12 +12,10 @@ complect {
     vertical-align: middle;
   }
 
-  .f-btn-bottom {
+  .f-btn-bottom.activated, .f-btn-bottom {
     position: absolute;
-    top: 80%;
-    left: 0px;
-    padding: 0px;
-    vertical-align: bottom;
+    height: 30px;
+    font-size: 12px;
   }
 
 

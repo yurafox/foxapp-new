@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, DoCheck, ElementRef, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component,DoCheck, ElementRef, ViewChild} from '@angular/core';
 import {App, NavController, IonicPage} from 'ionic-angular';
 import {ComponentBase} from '../../components/component-extension/component-base';
 import {AbstractDataRepository} from '../../app/service/index';
@@ -45,6 +45,8 @@ export class HomePage extends ComponentBase implements DoCheck {
   };
 
 
+  productsOfDay = [];
+  productsSalesHits = [];
   content: string = '';
   scrollHeight: number;
   scrOrientationSub: Subscription;
@@ -56,13 +58,31 @@ export class HomePage extends ComponentBase implements DoCheck {
     this.srchService.lastSearch = null;
   }
 
-  public updateScrollHeight() {
-    const hdrH = (this.header) ?  this.header.nativeElement.scrollHeight : 0;
-    this.scrollHeight = window.screen.height - hdrH;
+  async initData() {
+
+    let ar = await this._repo.getProductsOfDay();
+    this.productsOfDay = [];
+    for (let i of ar) {
+      let prod = await this._repo.getProductById(i);
+      this.productsOfDay.push(prod);
+    }
+
+    let shAr = await this._repo.getProductsSalesHits();
+    this.productsSalesHits = [];
+    for (let i of shAr) {
+      let prod = await this._repo.getProductById(i);
+      this.productsSalesHits.push(prod);
+    }
+
   }
 
   ngDoCheck() {
     this.updateScrollHeight();
+  }
+
+  public updateScrollHeight() {
+    const hdrH = (this.header) ?  this.header.nativeElement.scrollHeight : 0;
+    this.scrollHeight = window.screen.height - hdrH;
   }
 
   public set pageMode(val: PageMode) {
@@ -98,10 +118,11 @@ export class HomePage extends ComponentBase implements DoCheck {
 
   async ngOnInit() {
     super.ngOnInit();
-    this.doRefresh(0);
+    await this.doRefresh(0);
     this.scrOrientationSub = this.screenOrientation.onChange().subscribe(() => {
       if (this._pageMode !== 1) this.changeDet.detectChanges();
     });
+    await this.initData();
   }
 
   ngOnDestroy() {

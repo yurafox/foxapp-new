@@ -23,6 +23,7 @@ export class LocaleCurrencyPipe implements PipeTransform {
             currencyCode: number,
             nickDisplay: boolean = true,
             digits: string = null): any {
+    if (!value) return null;
     let currencyText: string = map[currencyCode.toString()].name;
     let dataUpdate = this.currencyStore.changeCurrency(+value, +currencyCode);
     return new CurrencyPipe(currencyText).transform(dataUpdate, currencyText, nickDisplay, digits);

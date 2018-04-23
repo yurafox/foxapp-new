@@ -69,8 +69,12 @@ export class OrdersPage extends ComponentBase {
   }
 
   async onViewOrderDetailsClick(orderId: number) {
-    const order = await this.repo.getClientOrderById(orderId);
-    order.orderProducts = await (<any>order).clientorderproducts_p;
+    //const order = await this.repo.getClientOrderById(orderId);
+    const order = await this.repo.getClientHistOrderById(orderId);
+    //console.log(order);
+    order.orderHistProducts = await this.repo.getClientHistOrderProductsByOrderId(orderId);
+    //console.log(order.orderHistProducts);
+    //order.orderProducts = await (<any>order).clientorderproducts_p;
     this.navCtrl.push('OrderDetailsPage', {order: order});
   }
 

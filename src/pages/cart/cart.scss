@@ -12,5 +12,39 @@ page-cart {
     height: 32px;
   }
 
+  .f-complect-box {
+    border: 1px solid rgba(184, 0, 18, 0.94);
+    //border: 1px solid;
+    border-radius: 5px;
+  }
 
+  .f-complect-box-top {
+    border: 1px solid rgba(184, 0, 18, 0.94);
+    border-bottom-style: none;
+    border-radius: 5px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+
+  .f-complect-box-bottom {
+    border: 1px solid rgba(184, 0, 18, 0.94);
+    border-top-style: none;
+    border-radius: 5px;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+  }
+
+  .f-item-margin-top {
+    margin-top: 5px;
+  }
+
+  .f-padding-lr-5-t0 {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+  }
+
+  .f-header-div {
+    border-bottom: solid 1px color($colors, gridlines);
+  }
 }

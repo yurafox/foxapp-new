@@ -18,7 +18,8 @@ export class ProductSearchParams {
   public categoryId?: number,
   public supplier?: number[],
   public productProps?: PropFilterCondition[],
-  public sortOrder: SortOrderEnum = SortOrderEnum.Relevance)
+  public sortOrder: SortOrderEnum = SortOrderEnum.Relevance,
+  public actionId?:number)
   {}
 }
 
@@ -105,6 +106,14 @@ export class SearchService {
     this.resetSearch();
     this.lastSearch = null;
     this.prodSrchParams = new ProductSearchParams(undefined, catId);
+    await this.getProductsData();
+  }
+
+  async searchByAction (actionId: number) {
+    this.resetSearch();
+    this.lastSearch = null;
+    this.prodSrchParams = new ProductSearchParams();
+    this.prodSrchParams.actionId=actionId;
     await this.getProductsData();
   }
 
@@ -298,7 +307,7 @@ export class SearchService {
     if (this.prodSrchParams.srchText) {
       mustArr.push({'simple_query_string': {
                                       'query': `${this.prodSrchParams.srchText}`,
-                                      'fields': [ 'name', 'description', 'srchString', 'id'],
+                                      'fields': [ 'name', 'description', 'srchString', 'id', 'barcode'],
                                       'default_operator': 'and'
                                     }
             });
@@ -316,6 +325,12 @@ export class SearchService {
                         }
                       }
                     }
+      });
+    };
+   
+    if (this.prodSrchParams.actionId) {
+      mustArr.push({
+        "match": { "actions":`${this.prodSrchParams.actionId}`}
       });
     };
 

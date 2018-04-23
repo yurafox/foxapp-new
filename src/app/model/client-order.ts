@@ -29,11 +29,11 @@ export class ClientOrder {
   }
 
   constructor(
-    public id: number,
-    public orderDate: Date,
-    public idCur: number,
-    public idClient: number,
-    public total: number = 0,
+    public id?: number,
+    public orderDate?: Date,
+    public idCur?: number,
+    public idClient?: number,
+    public total?: number,
     public idPaymentMethod?: number,
     public idPaymentStatus?: number,
     public idStatus?: number,
@@ -46,6 +46,9 @@ export class ClientOrder {
     public promoBonusTotal?: number,
     public bonusEarned?: number,
     public promoCodeDiscTotal?: number,
-    public idPerson?: number
+    public idPerson?: number,
+    public orderHistProducts?: ClientOrderProducts[],
+    public clientHistFIO?: string,
+    public clientHistAddress?: string
   ){this._repo = RefInjector.pull(AbstractDataRepository);}
 }

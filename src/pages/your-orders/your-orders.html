@@ -1,5 +1,6 @@
 <ion-header>
   <main-toolbar></main-toolbar>
+  <progress-bar [active]="!dataLoaded"></progress-bar>
 </ion-header>
 
 <ion-content>
@@ -36,7 +37,7 @@
 
   <div *ngIf="dataLoaded && orderProducts.length > 0">
     <div *ngFor="let ord of orderProducts">
-      <ion-grid class="f-padding-tb-10" *ngIf="ord.productImageUrl && ord.productName">
+      <ion-grid class="f-padding-tb-10">
 
         <ion-row class="f-padding-lr-5">
 
@@ -71,9 +72,11 @@
           <ion-item class="f-border-ligthgray" detail-push><span loc="Посмотреть детали заказа" name="ViewOrderDetails">{{locale['ViewOrderDetails']}}</span></ion-item>
         </ion-row>
 
+<!--
         <ion-row class="f-padding-lr-5" *ngIf="ord.loTrackTicket" (click)="onTrackItemClick(ord)">
           <ion-item class="f-border-ligthgray" detail-push><span loc="Отследить заказ" name="TrackItem">{{locale['TrackItem']}}</span></ion-item>
         </ion-row>
+-->
 
         <ion-row class="f-padding-lr-5" (click)="onWriteReviewClick(ord.idProduct)">
           <ion-item class="f-border-ligthgray" detail-push><span loc="Оставить отзыв о товаре" name="WriteProductReview">{{locale['WriteProductReview']}}</span></ion-item>

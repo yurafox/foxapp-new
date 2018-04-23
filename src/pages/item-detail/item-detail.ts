@@ -26,7 +26,6 @@ export class ItemDetailPage extends ItemBase implements OnInit {
   actionsArr = new Array<ActionByProduct>();
   complectsArr = new Array<ActionByProduct>();
 
-
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public repo: AbstractDataRepository, public cart: CartService,
               public modalCtrl: ModalController, public toastCtrl: ToastController,

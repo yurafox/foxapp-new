@@ -1,8 +1,8 @@
-<ion-header>
+<ion-header #header>
   <main-toolbar></main-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content #cont>
   <div style="height: 100%" *ngIf=content>
       <html-outlet [html]="content" [context]="this"></html-outlet>
   </div>

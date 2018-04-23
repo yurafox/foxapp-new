@@ -34,7 +34,7 @@
             <span loc="Сумма заказа" name="OrderTotal">{{locale['OrderTotal']}}</span>
           </ion-col>
           <ion-col>
-            {{order.total | localeCurrency:userService.currency}}  ({{order.orderProducts.length}} <span loc="товар(-а/-ов)" name="Items">{{locale['Items']}}</span>)
+            {{order.total | localeCurrency:userService.currency}}  ({{order.orderHistProducts.length}} <span loc="товар(-а/-ов)" name="Items">{{locale['Items']}}</span>)
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -47,10 +47,10 @@
     </ion-row>
 
 
-    <div class="f-size-larger" *ngFor="let spec of order.orderProducts; let i = index">
+    <div class="f-size-larger" *ngFor="let spec of order.orderHistProducts; let i = index">
       <ion-row>
         <ion-col class="f-section-subheader">
-          <span loc="Посылка" name="Shipment">{{locale['Shipment']}}</span> {{i+1}} <span loc="из" name="Of">{{locale['Of']}}</span> {{order.orderProducts.length}}
+          <span loc="Посылка" name="Shipment">{{locale['Shipment']}}</span> {{i+1}} <span loc="из" name="Of">{{locale['Of']}}</span> {{order.orderHistProducts.length}}
         </ion-col>
       </ion-row>
 
@@ -82,7 +82,7 @@
 
           <ion-row>
 
-            <ion-col *ngIf="spec?.quotationproduct?.product?.imageUrl" col-auto>
+            <ion-col col-auto>
               <div>
                 <img class="f-img-item-80" [src]="spec?.quotationproduct?.product?.imageUrl"
                      onError="this.src='assets/imgs/nophoto.png';">
@@ -158,23 +158,24 @@ PAYMENT INFO
 <!--
 SHIPPING ADDRESS INFO
 -->
+    <div *ngIf="order.clientHistAddress">
+      <ion-row>
+        <ion-col class="f-section-header"><b><span loc="Адрес доставки" name="ShippingAddress">{{locale['ShippingAddress']}}</span></b>
+        </ion-col>
+      </ion-row>
 
-    <ion-row>
-      <ion-col class="f-section-header"><b><span loc="Адрес доставки" name="ShippingAddress">{{locale['ShippingAddress']}}</span></b>
-      </ion-col>
-    </ion-row>
-
-    <ion-row class="f-padding-lr-5">
-      <ion-grid class="f-border-ligthgray f-size-larger" *ngIf="dataLoaded">
-        <ion-row>
-          <ion-col>
-            <b>{{order?.clientaddress?.recName}}</b>
-            <br>
-            {{order?.clientaddress?.addressString}}
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-row>
+      <ion-row class="f-padding-lr-5">
+        <ion-grid class="f-border-ligthgray f-size-larger" *ngIf="dataLoaded">
+          <ion-row>
+            <ion-col>
+              <b>{{order.clientHistFIO}}</b>
+              <br>
+              {{order.clientHistAddress}}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-row>
+    </div>
 
 
 <!--
@@ -198,7 +199,7 @@ ORDER SUMMARY AREA
           </ion-col>
         </ion-row>
 
-        <ion-row *ngIf="!(order.shippingTotal === 0)">
+        <ion-row *ngIf="order.shippingTotal && !(order.shippingTotal === 0)">
           <ion-col>
             <span loc="Доставка" name="Shipping">{{locale['Shipping']}}</span>:
           </ion-col>
@@ -208,7 +209,7 @@ ORDER SUMMARY AREA
         </ion-row>
 
 
-        <ion-row *ngIf="!(order.bonusTotal === 0)">
+        <ion-row *ngIf="order.bonusTotal && !(order.bonusTotal === 0)">
           <ion-col>
             <span loc="Использованные бонусы" name="BonusesPaid">{{locale['BonusesPaid']}}</span>:
           </ion-col>
@@ -217,7 +218,7 @@ ORDER SUMMARY AREA
           </ion-col>
         </ion-row>
 
-        <ion-row *ngIf="!(order.promoBonusTotal === 0)">
+        <ion-row *ngIf="order.promoBonusTotal && !(order.promoBonusTotal === 0)">
           <ion-col>
             <span loc="Использованные акционные бонусы" name="PromoBonusesPaid">{{locale['PromoBonusesPaid']}}</span>:
           </ion-col>
@@ -226,7 +227,7 @@ ORDER SUMMARY AREA
           </ion-col>
         </ion-row>
 
-        <ion-row *ngIf="(!(order.promoCodeDiscTotal === 0))">
+        <ion-row *ngIf="(order.promoCodeDiscTotal) && (order.promoCodeDiscTotal !== 0)">
           <ion-col>
             <span loc="Скидка промокода" name="PromocodeDiscount">{{locale['PromocodeDiscount']}}</span>:
           </ion-col>
@@ -245,7 +246,7 @@ ORDER SUMMARY AREA
           </ion-col>
         </ion-row>
 
-        <ion-row *ngIf="!(order.bonusEarned === 0)">
+        <ion-row *ngIf="order.bonusEarned && !(order.bonusEarned === 0)">
           <ion-col>
             <span loc="Полученные бонусы" name="BonusesEarned">{{locale['BonusesEarned']}}</span>:
           </ion-col>

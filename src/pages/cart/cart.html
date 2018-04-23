@@ -1,25 +1,32 @@
 <ion-header>
   <main-toolbar [showCartIcon]="false"></main-toolbar>
+  <div class="f-header-div">
+    <ion-grid>
+      <ion-row>
+        <ion-col text-center class="f-item-padding-bottom">
+          <span class="f-color-secondary f-size-larger"><span loc="Сумма корзины" name="CartSubtotal">{{locale['CartSubtotal']}}</span> {{cart.cartItemsCount}} <span loc="товар(-а/-ов)" name="Items">{{locale['Items']}}</span>:</span>
+          <span class="f-size-large f-color-red">{{cart.itemsTotal | localeCurrency:userService.currency}}</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <button class="f-btn-action" ion-button block [attr.disabled]="(cart.orderProducts.length == 0)?'':null" (click)="checkout()"><span loc="Подтвердить заказ" name="ProceedToCheckout">{{locale['ProceedToCheckout']}}</span></button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-header>
-<ion-content>
-  <ion-grid>
-    <ion-row>
-      <ion-col text-center class="f-item-padding-bottom">
-        <span class="f-color-secondary f-size-larger"><span loc="Сумма корзины" name="CartSubtotal">{{locale['CartSubtotal']}}</span> {{cart.cartItemsCount}} <span loc="товар(-а/-ов)" name="Items">{{locale['Items']}}</span>:</span>
-        <span class="f-size-large f-color-red">{{cart.itemsTotal | localeCurrency:userService.currency}}</span>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <button class="f-btn-action" ion-button block [attr.disabled]="(cart.orderProducts.length == 0)?'':null" (click)="checkout()"><span loc="Подтвердить заказ" name="ProceedToCheckout">{{locale['ProceedToCheckout']}}</span></button>
-      </ion-col>
-    </ion-row>
 
+<ion-content>
+
+  <ion-grid>
+<!--
+    <grid-hr></grid-hr>
+-->
     <!--
     Warning
     -->
 
-    <grid-hr></grid-hr>
     <div *ngIf="containsWarnings" (click)="onShowWarningsClick()">
       <ion-row >
         <ion-col>
@@ -34,100 +41,109 @@
   </ion-grid>
 
 
+  <ion-grid class="f-padding-lr-5-t0">
+    <div *ngFor="let item of cart.displayOrderProducts; let i = index"
+         [ngClass]="{'f-item-margin-top': isComplectDivisorItem(i) }">
+      <ion-grid *ngIf="item.orderProduct?.quotationproduct?.product && item.orderProduct?.quotationproduct?.quotation?.supplier"
+            class="f-color-secondary f-item-nopadding-tb f-bundle-grid"
+            [ngClass]="{'f-complect-box-top': isFirstComplectItem(i),'f-complect-box-bottom': isLastComplectItem(i) }">
 
-  <div *ngFor="let item of cart.orderProducts; let i = index" >
-    <ion-grid *ngIf="item?.quotationproduct?.product && item?.quotationproduct?.quotation?.supplier"
-          class="f-color-secondary f-item-nopadding-tb" >
+        <ion-row *ngIf="isFirstComplectItem(i)">
+          <ion-col class="f-padding-lr-5">
+            <span class="f-bundle-text">{{item.orderProduct.actionTitle}}</span>
+          </ion-col>
+        </ion-row>
 
-      <ion-row *ngIf="item.errorMessage">
-        <ion-col class="f-padding-lr-5 f-padding-b-10">
-          <error [errorText]="item?.errorMessage"></error>
-        </ion-col>
-      </ion-row>
+        <ion-row *ngIf="item.orderProduct.errorMessage">
+          <ion-col class="f-padding-lr-5 f-padding-b-10">
+            <error [errorText]="item.orderProduct?.errorMessage"></error>
+          </ion-col>
+        </ion-row>
 
-      <ion-row>
-        <ion-col col-auto>
-          <div *ngIf="item?.quotationproduct?.product">
-            <img class="f-img-item" width="60"  [src]="item?.quotationproduct?.product?.imageUrl"
-                 onError="this.src='assets/imgs/nophoto.png';">
-          </div>
-        </ion-col>
-        <ion-col no-padding>
-          <ion-grid class="f-item-nopadding-tb">
-            <ion-row>
-              <ion-col no-padding class="f-item-padding-bottom">
-                <b>{{item?.quotationproduct?.product?.name}}</b>
-              </ion-col>
-            </ion-row>
-
-            <ion-row>
-              <ion-col no-padding class="f-item-padding-bottom">
-                <span class="f-color-red">{{item.price | localeCurrency:userService.currency}}</span>
-              </ion-col>
-            </ion-row>
-
-            <ion-row *ngIf="item?.quotationproduct?.product?.bonuses">
-              <ion-col no-padding class="f-item-padding-bottom">
-                <bonus [bonusCnt]="item?.quotationproduct?.product?.bonuses"></bonus>
-              </ion-col>
-            </ion-row>
-
-
-            <ion-row *ngIf="item?.quotationproduct?.freeShipping">
-              <ion-col no-padding>
-                <b><span class="f-item-nopadding f-size-small f-color-green"><span loc="БЕСПЛАТНАЯ доставка" name="FreeShipping">{{locale['FreeShipping']}}</span></span></b>
-              </ion-col>
-            </ion-row>
-
-
-            <ion-row *ngIf="item?.quotationproduct?.stockLow; else elseBlock1">
-              <ion-col no-padding class="f-item-padding-bottom">
-                <span class="f-size-small f-color-red"><span loc="Только" name="Only">{{locale['Only']}}</span> {{item?.quotationproduct?.stockQuant}} <span loc="осталось" name="Left">{{locale['Left']}}</span>. <span loc="Заказать сейчас" name="OrderNow">{{locale['OrderNow']}}</span></span>
-              </ion-col>
-            </ion-row>
-            <ng-template #elseBlock1>
+        <ion-row style="padding-top: 10px;">
+          <ion-col col-auto>
+            <div *ngIf="item.orderProduct?.quotationproduct?.product">
+              <img class="f-img-item" [src]="item.orderProduct?.quotationproduct?.product?.imageUrl"
+                   onError="this.src='assets/imgs/nophoto.png';">
+            </div>
+          </ion-col>
+          <ion-col no-padding>
+            <ion-grid class="f-item-nopadding-tb">
               <ion-row>
                 <ion-col no-padding class="f-item-padding-bottom">
-                  <span class="f-size-small f-color-green"><span loc="В наличии" name="InStock">{{locale['InStock']}}</span></span>
+                  <b>{{item.orderProduct?.quotationproduct?.product?.name}}</b>
                 </ion-col>
               </ion-row>
-            </ng-template>
+
+              <ion-row>
+                <ion-col no-padding class="f-item-padding-bottom">
+                  <span class="f-color-red">{{item.orderProduct.price | localeCurrency:userService.currency}}</span>
+                </ion-col>
+              </ion-row>
+
+              <ion-row *ngIf="item.orderProduct?.quotationproduct?.product?.bonuses">
+                <ion-col no-padding class="f-item-padding-bottom">
+                  <bonus [bonusCnt]="item.orderProduct?.quotationproduct?.product?.bonuses"></bonus>
+                </ion-col>
+              </ion-row>
 
 
-            <ion-row>
-              <ion-col no-padding>
-                <span class="f-item-nopadding f-size-small"><span loc="Поставщик" name="ShippedBy">{{locale['ShippedBy']}}</span> </span>
-                <span class="f-item-nopadding f-size-small f-color-info">{{item?.quotationproduct?.quotation?.supplier?.name}}</span>
-              </ion-col>
-            </ion-row>
+              <ion-row *ngIf="item?.quotationproduct?.freeShipping">
+                <ion-col no-padding>
+                  <b><span class="f-item-nopadding f-size-small f-color-green"><span loc="БЕСПЛАТНАЯ доставка" name="FreeShipping">{{locale['FreeShipping']}}</span></span></b>
+                </ion-col>
+              </ion-row>
 
-            <ion-row *ngIf="item.idStorePlace">
-              <ion-col no-padding>
-                <span class="f-item-nopadding f-size-small"><span loc="БЕСПЛАТНОЕ получение" name="FreePickup">{{locale['FreePickup']}}</span> </span>
-                <span class="f-item-nopadding f-size-small f-color-green">{{item?.storeplace?.name}}, {{item?.storeplace?.address_line}}
-                {{item?.storeplace?.city?.name}}</span>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-col>
 
-      </ion-row>
+              <ion-row *ngIf="item.orderProduct?.quotationproduct?.stockLow; else elseBlock1">
+                <ion-col no-padding class="f-item-padding-bottom">
+                  <span class="f-size-small f-color-red"><span loc="Только" name="Only">{{locale['Only']}}</span> {{item.orderProduct?.quotationproduct?.stockQuant}} <span loc="осталось" name="Left">{{locale['Left']}}</span>. <span loc="Заказать сейчас" name="OrderNow">{{locale['OrderNow']}}</span></span>
+                </ion-col>
+              </ion-row>
+              <ng-template #elseBlock1>
+                <ion-row>
+                  <ion-col no-padding class="f-item-padding-bottom">
+                    <span class="f-size-small f-color-green"><span loc="В наличии" name="InStock">{{locale['InStock']}}</span></span>
+                  </ion-col>
+                </ion-row>
+              </ng-template>
 
-      <ion-row>
-        <ion-col col-auto class="f-item-padding-bottom" >
-          <dropdown-list id="btnQty" [reference]="item"
-                         [map]="{valueName:'qty', displayName:'qty'}"
-                         [afterUpdate] = "onAfterQtyUpdate"
-                         [options]="{popupHeader:locale['Quantity'], buttonHeader:locale['Qty']}"
-                         [isQty]="true">
-          </dropdown-list>
-        </ion-col>
-        <ion-col class="f-item-padding-left">
-          <button class="action-button" ion-button (click)="onDeleteItem(i)"><span loc="Удалить" name="Delete">{{locale['Delete']}}</span></button>
-        </ion-col>
-      </ion-row>
-      <hr>
-    </ion-grid>
-  </div>
+
+              <ion-row>
+                <ion-col no-padding>
+                  <span class="f-item-nopadding f-size-small"><span loc="Поставщик" name="ShippedBy">{{locale['ShippedBy']}}</span> </span>
+                  <span class="f-item-nopadding f-size-small f-color-info">{{item.orderProduct?.quotationproduct?.quotation?.supplier?.name}}</span>
+                </ion-col>
+              </ion-row>
+
+              <ion-row *ngIf="item.orderProduct.idStorePlace">
+                <ion-col no-padding>
+                  <span class="f-item-nopadding f-size-small"><span loc="БЕСПЛАТНОЕ получение" name="FreePickup">{{locale['FreePickup']}}</span> </span>
+                  <span class="f-item-nopadding f-size-small f-color-green">{{item.orderProduct?.storeplace?.city?.name}}, {{item.orderProduct?.storeplace?.address_line}}
+                  </span>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-col>
+
+        </ion-row>
+
+        <ion-row *ngIf="(!item.orderProduct.complect) || (item.orderProduct.complect && (item.prevComplect === item.orderProduct.complect))">
+          <ion-col col-auto class="f-item-padding-bottom" style="padding-bottom: 10px;" >
+            <dropdown-list id="btnQty" [reference]="item.orderProduct"
+                           [map]="{valueName:'qty', displayName:'qty'}"
+                           [afterUpdate] = "onAfterQtyUpdate"
+                           [options]="{popupHeader:locale['Quantity'], buttonHeader:locale['Qty']}"
+                           [isQty]="true">
+            </dropdown-list>
+          </ion-col>
+          <ion-col class="f-item-padding-left">
+            <button class="action-button" ion-button (click)="onDeleteItem(i)"><span loc="Удалить" name="Delete">{{locale['Delete']}}</span></button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+  </ion-grid>
 
 </ion-content>

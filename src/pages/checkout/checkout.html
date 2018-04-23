@@ -47,7 +47,7 @@
             {{cart.itemsTotal | localeCurrency:userService.currency}}
           </ion-col>
         </ion-row>
-        <ion-row>
+        <ion-row *ngIf="cart.shippingCost">
           <ion-col>
             <span loc="Доставка" name="Shipping">{{locale['Shipping']}}</span>:
           </ion-col>
@@ -193,6 +193,13 @@
             </ion-col>
             <ion-col no-padding>
               <ion-grid class="f-item-nopadding-tb">
+
+                <ion-row *ngIf="item?.actionTitle">
+                  <ion-col>
+                    <span class="f-bundle-text">{{item?.actionTitle}}</span>
+                  </ion-col>
+                </ion-row>
+
                 <ion-row>
                   <ion-col>
                     <span><b>{{item?.quotationproduct?.product.name}}</b></span>
@@ -220,6 +227,13 @@
                 </ion-row>
 
 -->
+                <ion-row *ngIf="item.complect">
+                  <ion-col class="f-size-small f-bundle-text">
+                    <span><i>*This item is a part of bundle. Quantities of all bundle's parts will be automatically synchronized upon change</i></span>
+                  </ion-col>
+                </ion-row>
+
+
 
                 <ion-row *ngIf="item.errorMessage">
                   <ion-col class="f-size-small">

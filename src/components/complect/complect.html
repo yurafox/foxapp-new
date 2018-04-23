@@ -1,9 +1,6 @@
-<!--
-[attr.pager]="!complectAgg.length>0?'':null"
--->
-<ion-slides #slides pager>
+<ion-slides #slides [attr.pager]="complectAgg.length>1?'':null">
   <ion-slide *ngFor="let item of complectAgg">
-    <div style="height: 180px;">
+    <div [ngStyle]="{'height.px': complectAgg.length>1? 185 : 150}">
       <ion-grid no-padding>
         <ion-row>
           <ion-col no-padding text-left>
@@ -22,7 +19,7 @@
                   </ion-row>
                   <ion-row>
                     <ion-col>
-                      <img class="f-img-item" style="width: 60px;" [src]="mainProdImgUrl"
+                      <img class="f-img-item" style="height: 60px;" [src]="mainProdImgUrl"
                            onError="this.src='assets/imgs/nophoto.png';">
                     </ion-col>
                   </ion-row>
@@ -44,7 +41,7 @@
 
             <ion-grid no-padding class="f-size-small">
               <ion-row *ngIf="item.variants.length>1">
-                <ion-col (click)="scrollOptions(item, 1)">
+                <ion-col (click)="onScrollOptions(item, 1)">
                   <ion-icon name="ios-arrow-up"></ion-icon>
                 </ion-col>
               </ion-row>
@@ -53,8 +50,8 @@
                 <ion-col>
                   <ion-grid no-padding>
                     <ion-row>
-                      <ion-col (click)="viewProduct(item)">
-                        <img class="f-img-item" style="width: 60px;" [src]="item.variants[item.selIndex].secondProductImgUrl"
+                      <ion-col (click)="onOpenItemDetail(item)">
+                        <img class="f-img-item" style="height: 60px;" [src]="item.variants[item.selIndex].secondProductImgUrl"
                              onError="this.src='assets/imgs/nophoto.png';">
                       </ion-col>
                     </ion-row>
@@ -74,7 +71,7 @@
                 </ion-col>
               </ion-row>
               <ion-row *ngIf="item.variants.length>1">
-                <ion-col (click)="scrollOptions(item, -1)">
+                <ion-col (click)="onScrollOptions(item, -1)">
                   <ion-icon name="ios-arrow-down"></ion-icon>
                 </ion-col>
               </ion-row>
@@ -88,7 +85,7 @@
                 <span class="math-sign">=</span>
               </ion-col>
 
-              <ion-col col-10 no-padding>
+              <ion-col col-10 no-padding style="padding-right: 3px;">
                 <ion-row>
                   <ion-grid no-padding>
                     <ion-row>
@@ -119,7 +116,7 @@
                     <ion-row>
                       <ion-col style="padding-top: 5px;">
                         <button class="f-btn-action f-btn-bottom" ion-button block
-                                (click)="onAddToCart()"><span>Add to Cart</span>
+                                (click)="onAddToCart(item)"><span>Add to Cart</span>
                         </button>
                       </ion-col>
                     </ion-row>
@@ -135,8 +132,4 @@
       </ion-grid>
     </div>
   </ion-slide>
-<!--
-  <button type="submit" float-left ion-button  class="btnPrev swiper-button-prev" (click)="prev()"></button>
-  <button type="submit" float-right ion-button class="btnNext swiper-button-next" (click)="next()"></button>
--->
 </ion-slides>

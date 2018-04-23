@@ -306,8 +306,23 @@ ion-header.header.header-md::after {
   font-size: 1.8rem;
 }
 
+.f-product-price-small {
+  color: #616161;
+  font-size: 1.6rem;
+  font-weight: 400;
+}
+
+.f-product-price {
+  color: #3b3b3b;
+}
+
+.f-product-name {
+  font-weight: bold;
+}
+
 .f-product {
   color: #3b3b3b;
+  //color: rgba(184, 0, 18, 0.94);
 }
 
 .f-old-price {
@@ -321,6 +336,10 @@ ion-header.header.header-md::after {
 
 .f-color-info {
   color: darkslateblue;
+}
+
+.f-bundle-text {
+  color: rgba(184, 0, 18, 0.94);
 }
 
 .f-color-secondary {
@@ -357,6 +376,15 @@ ion-header.header.header-md::after {
 }
 
 /// ION-GRID, ROWS, COLS
+.f-div-card-margin {
+  background-color: white;
+  margin-top: 5px;
+}
+
+.f-div-card {
+  background-color: white;
+}
+
 .col {
   padding-top: 2px;
   padding-bottom: 2px;
@@ -500,6 +528,7 @@ ion-header.header.header-md::after {
 
 .f-img-item-lg {
   padding: 6px 4px 2px;
+  height: 50vh;
 }
 
 //buttons
