@@ -1110,7 +1110,7 @@ export class AppDataRepository extends AbstractDataRepository {
       /*
       return qProductsStorePlaces.sort((a, b) =>
         {return ( (<any>a).idStorePlace.storeplace.city.name - (<any>b).idStorePlace.storeplace.city.name)});
-*/
+      */
       return qProductsStorePlaces;
     } catch (err) {
       return await this.handleError(err);

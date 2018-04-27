@@ -390,13 +390,13 @@ export class RequestFactory {
    **/
    public static makeAuthHeader(): RequestOptionsArgs{
     const h = new Headers();
-    //h.set('Authorization', `Bearer ${localStorage.getItem('token') || ''}`);
+    // h.set('Authorization', `Bearer ${localStorage.getItem('token') || ''}`);
     h.set('X-Currency',localStorage.getItem('currency') || `${AppConstants.CURRENCY_DEFAULT_VALUE}`);
     h.set('X-Lang',localStorage.getItem('lang') || `${AppConstants.LOCALE_DEFAULT_VALUE}`);
     // h.set('X-User',localStorage.getItem('id') || '');
     
     // This line is only for testing 
-    // TODO: Remove if you're not testing now
+    // TODO: Comment it, if you're not testing now
     h.set('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZSI6IjM4MDYzNzY1Mjg0OSIsImNhcmQiOiIxMDIiLCJjbGllbnRJZCI6IjEwMiIsIm5iZiI6MTUyMjkzMzI0OCwiZXhwIjoxNTIyOTM2ODQ4LCJpc3MiOiJmb3hzdG9yZSIsImF1ZCI6IndlYmhvc3RzIn0.ZJAzBgef67W4QxB_Z1GBWcPFV6o7fYeXTU4rrbxcfo0`);
 
     return {headers:h}

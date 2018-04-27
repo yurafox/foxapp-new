@@ -109,7 +109,7 @@ export class UserService {
 
   // <editor-fold desc='methods'>
   public clear(): void {
-    //this.removeDataFromStorage(['id','token','appKey']);
+    this.removeDataFromStorage(['id','token','appKey']);
   }
 
   public logOut(): void {
